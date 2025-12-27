@@ -895,7 +895,7 @@ class _PhoneLoginContentState extends State<PhoneLoginContent> {
                     child: TextField(
                       controller: _phoneController,
                       keyboardType: TextInputType.phone,
-                      textAlign: TextAlign.left,
+                      textAlign: TextAlign.start,
                       textDirection: TextDirection.ltr,
                       style: const TextStyle(
                           color: AppColors.textPrimary, fontSize: 18),
@@ -941,7 +941,7 @@ class QRLoginContent extends StatelessWidget {
           const Expanded(
             child: Column(
               mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                     'برای ورود به اپ، لطفاً این QR Code را با موبایل خود اسکن کنید.',
@@ -1815,7 +1815,7 @@ class _PersianCalendarState extends State<PersianCalendar> {
   Widget build(BuildContext context) {
     return Column(
       mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.end,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // Header row - nav buttons on right, title in center, today button on left
         Row(
@@ -3832,231 +3832,219 @@ class _ClassSessionScreenState extends State<ClassSessionScreen> {
       );
     }
 
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Scaffold(
-        body: NoiseBackground(
-          child: Stack(
-            children: [
-              // MAIN CONTENT
-              Padding(
-                padding: const EdgeInsets.fromLTRB(40, 32, 90, 40),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Header row with back, previous and next buttons
-                    Row(
-                      children: [
-                        // Back button (right in RTL = start)
-                        _BackButton(onPressed: () => Navigator.pop(context)),
-                        const Spacer(),
-                        // Previous section button
-                        if (_selectedTabIndex > 0)
-                          Padding(
-                            padding: const EdgeInsets.only(left: 12),
-                            child: FocusableItem(
-                              onSelect: () {
-                                if (_selectedTabIndex > 0) {
-                                  setState(() => _selectedTabIndex--);
-                                }
-                              },
-                              builder: (isFocused) => AnimatedContainer(
-                                duration: const Duration(milliseconds: 180),
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 20, vertical: 12),
-                                decoration: BoxDecoration(
-                                  color: AppColors.cardBackground,
-                                  borderRadius: BorderRadius.circular(16),
-                                  border: Border.all(
-                                      color: isFocused
-                                          ? AppColors.primary
-                                          : AppColors.cardBorder,
-                                      width: isFocused ? 2 : 1),
-                                ),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Icon(Icons.play_arrow_rounded,
-                                        size: 20,
+    return Scaffold(
+      body: NoiseBackground(
+        child: Row(
+          textDirection: TextDirection.ltr,
+          children: [
+            // MAIN CONTENT - pushes left when sidebar expands
+            Expanded(
+              child: Directionality(
+                textDirection: TextDirection.rtl,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(40, 32, 24, 40),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Header row with back, previous and next buttons
+                      Row(
+                        children: [
+                          // Back button (right in RTL = start)
+                          _BackButton(onPressed: () => Navigator.pop(context)),
+                          const Spacer(),
+                          // Previous section button
+                          if (_selectedTabIndex > 0)
+                            Padding(
+                              padding: const EdgeInsets.only(left: 12),
+                              child: FocusableItem(
+                                onSelect: () {
+                                  if (_selectedTabIndex > 0) {
+                                    setState(() => _selectedTabIndex--);
+                                  }
+                                },
+                                builder: (isFocused) => AnimatedContainer(
+                                  duration: const Duration(milliseconds: 180),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20, vertical: 12),
+                                  decoration: BoxDecoration(
+                                    color: AppColors.cardBackground,
+                                    borderRadius: BorderRadius.circular(16),
+                                    border: Border.all(
                                         color: isFocused
-                                            ? Colors.white
-                                            : AppColors.textSecondary),
-                                    const SizedBox(width: 6),
-                                    Text('بخش قبل',
-                                        style: TextStyle(
-                                            color: isFocused
-                                                ? Colors.white
-                                                : AppColors.textSecondary,
-                                            fontSize: 16)),
-                                  ],
+                                            ? AppColors.primary
+                                            : AppColors.cardBorder,
+                                        width: isFocused ? 2 : 1),
+                                  ),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Icon(Icons.play_arrow_rounded,
+                                          size: 20,
+                                          color: isFocused
+                                              ? Colors.white
+                                              : AppColors.textSecondary),
+                                      const SizedBox(width: 6),
+                                      Text('بخش قبل',
+                                          style: TextStyle(
+                                              color: isFocused
+                                                  ? Colors.white
+                                                  : AppColors.textSecondary,
+                                              fontSize: 16)),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        // Next section button (left in RTL = end)
-                        FocusableItem(
-                          onSelect: () {
-                            // If on lesson plan tab, show summary
-                            if (_selectedTabIndex == 2) {
-                              setState(() => _showLessonSummary = true);
-                            } else if (_selectedTabIndex == 0) {
-                              // If on attendance tab, show success
-                              setState(() => _showAttendanceSuccess = true);
-                            } else if (_selectedTabIndex < _tabs.length - 1) {
-                              setState(() => _selectedTabIndex++);
-                            }
-                          },
-                          builder: (isFocused) => AnimatedContainer(
-                            duration: const Duration(milliseconds: 180),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 12),
-                            decoration: BoxDecoration(
-                              color: AppColors.primary,
-                              borderRadius: BorderRadius.circular(16),
-                              border: Border.all(
-                                  color: isFocused
-                                      ? Colors.white
-                                      : Colors.transparent,
-                                  width: 2),
-                            ),
-                            child: const Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text('بخش بعدی',
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 16)),
-                                SizedBox(width: 6),
-                                Icon(Icons.chevron_right_rounded,
-                                    size: 24, color: Colors.white),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 20),
-                    // Tab bar
-                    SizedBox(
-                      height: 50,
-                      child: ListView.separated(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: _tabs.length,
-                        separatorBuilder: (_, __) => const SizedBox(width: 12),
-                        itemBuilder: (context, index) {
-                          final isSelected = index == _selectedTabIndex;
-                          return FocusableItem(
-                            autofocus: index == 0,
-                            onSelect: () =>
-                                setState(() => _selectedTabIndex = index),
+                          // Next section button (left in RTL = end)
+                          FocusableItem(
+                            onSelect: () {
+                              // If on lesson plan tab, show summary
+                              if (_selectedTabIndex == 2) {
+                                setState(() => _showLessonSummary = true);
+                              } else if (_selectedTabIndex == 0) {
+                                // If on attendance tab, show success
+                                setState(() => _showAttendanceSuccess = true);
+                              } else if (_selectedTabIndex < _tabs.length - 1) {
+                                setState(() => _selectedTabIndex++);
+                              }
+                            },
                             builder: (isFocused) => AnimatedContainer(
                               duration: const Duration(milliseconds: 180),
                               padding: const EdgeInsets.symmetric(
-                                  horizontal: 24, vertical: 12),
+                                  horizontal: 20, vertical: 12),
                               decoration: BoxDecoration(
-                                color: isSelected
-                                    ? Colors.transparent
-                                    : AppColors.cardBackground,
+                                color: AppColors.primary,
                                 borderRadius: BorderRadius.circular(16),
                                 border: Border.all(
-                                  color: isSelected
-                                      ? AppColors.primary
-                                      : (isFocused
-                                          ? AppColors.primary
-                                          : AppColors.cardBorder),
-                                  width: isSelected ? 2 : 1,
-                                ),
+                                    color: isFocused
+                                        ? Colors.white
+                                        : Colors.transparent,
+                                    width: 2),
                               ),
-                              child: Text(
-                                _tabs[index],
-                                style: TextStyle(
-                                  color: isSelected
-                                      ? AppColors.primary
-                                      : (isFocused
-                                          ? Colors.white
-                                          : AppColors.textSecondary),
-                                  fontSize: 15,
-                                  fontWeight: isSelected
-                                      ? FontWeight.w600
-                                      : FontWeight.w400,
-                                ),
+                              child: const Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text('بخش بعدی',
+                                      style: TextStyle(
+                                          color: Colors.white, fontSize: 16)),
+                                  SizedBox(width: 6),
+                                  Icon(Icons.chevron_right_rounded,
+                                      size: 24, color: Colors.white),
+                                ],
                               ),
                             ),
-                          );
-                        },
+                          ),
+                        ],
                       ),
-                    ),
-                    const SizedBox(height: 24),
-                    // Content based on selected tab
-                    Expanded(
-                      child: _buildTabContent(),
-                    ),
-                    // Bottom assistant button - only on attendance tab
-                    if (_selectedTabIndex == 0)
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: FocusableItem(
-                          onSelect: _showAttendanceMethodDialog,
-                          builder: (isFocused) => AnimatedContainer(
-                            duration: const Duration(milliseconds: 180),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 14),
-                            decoration: BoxDecoration(
-                              color: const Color(0xFFFFC107),
-                              borderRadius: BorderRadius.circular(16),
-                              border: Border.all(
-                                  color: isFocused
-                                      ? Colors.white
-                                      : Colors.transparent,
-                                  width: 2),
-                            ),
-                            child: const Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Icon(Icons.support_agent_rounded,
-                                    size: 22, color: Colors.black87),
-                                SizedBox(width: 10),
-                                Text('بررسی با کمک دستیار',
-                                    style: TextStyle(
-                                        color: Colors.black87,
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.w500)),
-                              ],
+                      const SizedBox(height: 20),
+                      // Tab bar
+                      SizedBox(
+                        height: 50,
+                        child: ListView.separated(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: _tabs.length,
+                          separatorBuilder: (_, __) =>
+                              const SizedBox(width: 12),
+                          itemBuilder: (context, index) {
+                            final isSelected = index == _selectedTabIndex;
+                            return FocusableItem(
+                              autofocus: index == 0,
+                              onSelect: () =>
+                                  setState(() => _selectedTabIndex = index),
+                              builder: (isFocused) => AnimatedContainer(
+                                duration: const Duration(milliseconds: 180),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 24, vertical: 12),
+                                decoration: BoxDecoration(
+                                  color: isSelected
+                                      ? Colors.transparent
+                                      : AppColors.cardBackground,
+                                  borderRadius: BorderRadius.circular(16),
+                                  border: Border.all(
+                                    color: isSelected
+                                        ? AppColors.primary
+                                        : (isFocused
+                                            ? AppColors.primary
+                                            : AppColors.cardBorder),
+                                    width: isSelected ? 2 : 1,
+                                  ),
+                                ),
+                                child: Text(
+                                  _tabs[index],
+                                  style: TextStyle(
+                                    color: isSelected
+                                        ? AppColors.primary
+                                        : (isFocused
+                                            ? Colors.white
+                                            : AppColors.textSecondary),
+                                    fontSize: 15,
+                                    fontWeight: isSelected
+                                        ? FontWeight.w600
+                                        : FontWeight.w400,
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                      const SizedBox(height: 24),
+                      // Content based on selected tab
+                      Expanded(
+                        child: _buildTabContent(),
+                      ),
+                      // Bottom assistant button - only on attendance tab
+                      if (_selectedTabIndex == 0)
+                        Align(
+                          alignment: AlignmentDirectional.centerStart,
+                          child: FocusableItem(
+                            onSelect: _showAttendanceMethodDialog,
+                            builder: (isFocused) => AnimatedContainer(
+                              duration: const Duration(milliseconds: 180),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 20, vertical: 14),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFFFC107),
+                                borderRadius: BorderRadius.circular(16),
+                                border: Border.all(
+                                    color: isFocused
+                                        ? Colors.white
+                                        : Colors.transparent,
+                                    width: 2),
+                              ),
+                              child: const Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(Icons.support_agent_rounded,
+                                      size: 22, color: Colors.black87),
+                                  SizedBox(width: 10),
+                                  Text('بررسی با کمک دستیار',
+                                      style: TextStyle(
+                                          color: Colors.black87,
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w500)),
+                                ],
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                  ],
-                ),
-              ),
-              // DIMMER OVERLAY when sidebar is expanded
-              if (_sidebarExpanded)
-                Positioned.fill(
-                  child: GestureDetector(
-                    onTap: () => setState(() => _sidebarExpanded = false),
-                    child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 200),
-                      color: Colors.black.withOpacity(0.5),
-                    ),
+                    ],
                   ),
                 ),
-              // SIDEBAR - overlay on right
-              Positioned(
-                top: 0,
-                bottom: 0,
-                right: 0,
-                child: _Sidebar(
-                  expanded: _sidebarExpanded,
-                  selectedIndex: _selectedNavIndex,
-                  onHover: (e) => setState(() => _sidebarExpanded = e),
-                  onSelect: (i) => setState(() => _selectedNavIndex = i),
-                  onLogout: () => Navigator.of(context).pushAndRemoveUntil(
-                      _createRoute(const ProfileSelectionScreen()),
-                      (route) => false),
-                  isGuest: widget.isGuest,
-                ),
               ),
-            ],
-          ),
+            ),
+            // SIDEBAR - pushes content when expanded
+            _Sidebar(
+              expanded: _sidebarExpanded,
+              selectedIndex: _selectedNavIndex,
+              onHover: (e) => setState(() => _sidebarExpanded = e),
+              onSelect: (i) => setState(() => _selectedNavIndex = i),
+              onLogout: () => Navigator.of(context).pushAndRemoveUntil(
+                  _createRoute(const ProfileSelectionScreen()),
+                  (route) => false),
+              isGuest: widget.isGuest,
+            ),
+          ],
         ),
       ),
     );
@@ -4180,7 +4168,7 @@ class _AttendanceContent extends StatelessWidget {
         const Spacer(),
         // Navigation arrows and status buttons (last in RTL = left side)
         Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Navigation arrows
             Row(
@@ -4784,26 +4772,52 @@ class _LessonPlanContent extends StatelessWidget {
       children: [
         // Table of contents sidebar (RIGHT in RTL - first in Row)
         SizedBox(
-          width: 280,
+          width: 300,
           child: Container(
-            padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              color: AppColors.cardBackground,
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: AppColors.cardBorder.withOpacity(0.3)),
+              color: const Color(0xFF0D0D0D).withOpacity(0.8),
+              borderRadius: BorderRadius.circular(24),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.4),
+                  blurRadius: 25,
+                  offset: const Offset(0, 10),
+                ),
+              ],
             ),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'فهرست',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+                // Premium header with gradient text effect (subtle)
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 24, 20, 12),
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 4,
+                        height: 24,
+                        decoration: BoxDecoration(
+                          color: AppColors.primary,
+                          borderRadius: BorderRadius.circular(2),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      const Text(
+                        'فهرست مطالب',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                const SizedBox(height: 20),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  child: Divider(color: Colors.white12, height: 1),
+                ),
+                const SizedBox(height: 16),
                 Expanded(
                   child: _buildTableOfContents(),
                 ),
@@ -4824,7 +4838,7 @@ class _LessonPlanContent extends StatelessWidget {
             child: itemType == 'quiz'
                 ? _buildQuizScrollableContent(currentItem)
                 : Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       // Header with title, designer, and duration
                       _buildContentHeader(currentItem),
@@ -4845,6 +4859,32 @@ class _LessonPlanContent extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        // Title and designer on right
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                currentItem['title'] as String,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              if (currentItem['designer'] != null) ...[
+                const SizedBox(height: 6),
+                Text(
+                  'طراحی شده توسط ${currentItem['designer']}',
+                  style: const TextStyle(
+                    color: Color(0xFF4CAF50),
+                    fontSize: 14,
+                  ),
+                ),
+              ],
+            ],
+          ),
+        ),
         // Duration on left
         if (currentItem['duration'] != null)
           Text(
@@ -4854,31 +4894,6 @@ class _LessonPlanContent extends StatelessWidget {
               fontSize: 14,
             ),
           ),
-        const Spacer(),
-        // Title and designer on right
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            Text(
-              currentItem['title'] as String,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            if (currentItem['designer'] != null) ...[
-              const SizedBox(height: 6),
-              Text(
-                'طراحی شده توسط ${currentItem['designer']}',
-                style: const TextStyle(
-                  color: Color(0xFF4CAF50),
-                  fontSize: 14,
-                ),
-              ),
-            ],
-          ],
-        ),
       ],
     );
   }
@@ -4886,7 +4901,7 @@ class _LessonPlanContent extends StatelessWidget {
   Widget _buildQuizScrollableContent(Map<String, dynamic> currentItem) {
     return SingleChildScrollView(
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Header
           _buildContentHeader(currentItem),
@@ -4922,6 +4937,38 @@ class _LessonPlanContent extends StatelessWidget {
       padding: const EdgeInsets.only(top: 20),
       child: Row(
         children: [
+          // Previous topic button (RIGHT in RTL) - blue
+          Expanded(
+            child: FocusableItem(
+              onSelect: () {},
+              builder: (isFocused) => AnimatedContainer(
+                duration: const Duration(milliseconds: 180),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
+                decoration: BoxDecoration(
+                  color: AppColors.primary,
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(
+                    color: isFocused ? Colors.white : Colors.transparent,
+                    width: 2,
+                  ),
+                ),
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'تابع موج و احتمال',
+                      style: TextStyle(color: Colors.white, fontSize: 15),
+                    ),
+                    SizedBox(width: 10),
+                    Icon(Icons.chevron_right_rounded,
+                        color: Colors.white, size: 22),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(width: 16),
           // Next topic button (LEFT in RTL)
           Expanded(
             flex: 2,
@@ -4961,38 +5008,6 @@ class _LessonPlanContent extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(width: 16),
-          // Previous topic button (RIGHT in RTL) - blue
-          Expanded(
-            child: FocusableItem(
-              onSelect: () {},
-              builder: (isFocused) => AnimatedContainer(
-                duration: const Duration(milliseconds: 180),
-                padding:
-                    const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
-                decoration: BoxDecoration(
-                  color: AppColors.primary,
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(
-                    color: isFocused ? Colors.white : Colors.transparent,
-                    width: 2,
-                  ),
-                ),
-                child: const Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'تابع موج و احتمال',
-                      style: TextStyle(color: Colors.white, fontSize: 15),
-                    ),
-                    SizedBox(width: 10),
-                    Icon(Icons.chevron_left_rounded,
-                        color: Colors.white, size: 22),
-                  ],
-                ),
-              ),
-            ),
-          ),
         ],
       ),
     );
@@ -5001,7 +5016,7 @@ class _LessonPlanContent extends StatelessWidget {
   Widget _buildTableOfContents() {
     return SingleChildScrollView(
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Chapter 1: مقدمه‌ای بر مدل کوانتومی
           _TOCChapter(
@@ -5220,7 +5235,7 @@ class _ClassExamContentState extends State<_ClassExamContent> {
                       // Text content on right side
                       Expanded(
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             const Text(
@@ -5234,7 +5249,7 @@ class _ClassExamContentState extends State<_ClassExamContent> {
                             const SizedBox(height: 20),
                             Text(
                               'با دوربین موبایل خود این QR Code را اسکن کنید.\nبعد از اسکن، صفحه‌ای برای شما باز می‌شود که می‌توانید\nسؤال‌های امتحان را همان‌جا در موبایل وارد و ثبت کنید.',
-                              textAlign: TextAlign.right,
+                              textAlign: TextAlign.start,
                               style: TextStyle(
                                 color: Colors.white.withOpacity(0.9),
                                 fontSize: 14,
@@ -5244,7 +5259,7 @@ class _ClassExamContentState extends State<_ClassExamContent> {
                             const SizedBox(height: 20),
                             Text(
                               'مراحل بعدی طراحی و مدیریت امتحان از طریق موبایل شما\nانجام می‌شود و نتیجه روی همین صفحه نمایش داده\nخواهد شد.',
-                              textAlign: TextAlign.right,
+                              textAlign: TextAlign.start,
                               style: TextStyle(
                                 color: AppColors.textSecondary,
                                 fontSize: 13,
@@ -5268,12 +5283,41 @@ class _ClassExamContentState extends State<_ClassExamContent> {
   Widget _buildQuestionsView() {
     return SingleChildScrollView(
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Header row - Title on right, Timer on left
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // Title and designer on right
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Text(
+                          'امتحان کلاسی',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        Text(
+                          'طراحی شده توسط پامادان',
+                          style: TextStyle(
+                            color: const Color(0xFF7CB342),
+                            fontSize: 13,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
               // Timer on far left
               Row(
                 mainAxisSize: MainAxisSize.min,
@@ -5288,41 +5332,13 @@ class _ClassExamContentState extends State<_ClassExamContent> {
                   ),
                 ],
               ),
-              const Spacer(),
-              // Title and designer on right
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        'طراحی شده توسط پامادان',
-                        style: TextStyle(
-                          color: const Color(0xFF7CB342),
-                          fontSize: 13,
-                        ),
-                      ),
-                      const SizedBox(width: 16),
-                      const Text(
-                        'امتحان کلاسی',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
             ],
           ),
           const SizedBox(height: 32),
           // Question 1 - Multiple choice
           const Text(
             '۱. مهم‌ترین تفاوت مدل بور و مدل کوانتومی در توصیف حرکت الکترون چیست؟',
-            textAlign: TextAlign.right,
+            textAlign: TextAlign.start,
             style: TextStyle(
               color: Colors.white,
               fontSize: 16,
@@ -5378,7 +5394,7 @@ class _ClassExamContentState extends State<_ClassExamContent> {
           // Question 2 - Text question
           const Text(
             '۲. تابع موج در مدل کوانتومی چه چیزی را نشان می‌دهد و چرا مقدار آن به‌تنهایی معنای فیزیکی ندارد؟',
-            textAlign: TextAlign.right,
+            textAlign: TextAlign.start,
             style: TextStyle(
               color: Colors.white,
               fontSize: 16,
@@ -5390,7 +5406,7 @@ class _ClassExamContentState extends State<_ClassExamContent> {
           // Question 3 - Text question
           const Text(
             '۳. نقش اعداد کوانتومی را در مشخص کردن وضعیت یک الکترون در اتم توضیح بده. توضیح بده هر عدد کوانتومی چه اطلاعاتی می‌دهد و این چهار عدد چگونه با هم یک حالت الکترونی کامل را تعریف می‌کنند.',
-            textAlign: TextAlign.right,
+            textAlign: TextAlign.start,
             style: TextStyle(
               color: Colors.white,
               fontSize: 16,
@@ -5434,7 +5450,7 @@ class _ExamAnswerCard extends StatelessWidget {
             Expanded(
               child: Text(
                 text,
-                textAlign: TextAlign.right,
+                textAlign: TextAlign.start,
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 14,
@@ -5690,7 +5706,7 @@ class _NextHomeworkContentState extends State<_NextHomeworkContent> {
                       // Text content on right side
                       Expanded(
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             const Text(
@@ -5704,7 +5720,7 @@ class _NextHomeworkContentState extends State<_NextHomeworkContent> {
                             const SizedBox(height: 20),
                             Text(
                               'برای ثبت تکلیف این جلسه، لطفاً QR Code روی صفحه را با\nموبایل خود اسکن کنید.',
-                              textAlign: TextAlign.right,
+                              textAlign: TextAlign.start,
                               style: TextStyle(
                                 color: Colors.white.withOpacity(0.9),
                                 fontSize: 14,
@@ -5714,7 +5730,7 @@ class _NextHomeworkContentState extends State<_NextHomeworkContent> {
                             const SizedBox(height: 20),
                             Text(
                               'بعد از اسکن، وارد یک صفحه اختصاصی می‌شوید که در آن\nمی‌توانید تکالیف دانش‌آموزان را به‌طور کامل وارد کنید؛\nاز توضیح درس گرفته تا فایل، تصویر یا حتی نکات تکمیلی که\nلازم است در اختیار دانش‌آموز قرار بگیرد.',
-                              textAlign: TextAlign.right,
+                              textAlign: TextAlign.start,
                               style: TextStyle(
                                 color: AppColors.textSecondary,
                                 fontSize: 13,
@@ -5746,25 +5762,26 @@ class _NextHomeworkContentState extends State<_NextHomeworkContent> {
       ),
       child: SingleChildScrollView(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Header - Title on right, Designer on left
             Row(
               children: [
+                const Expanded(
+                  child: Text(
+                    'تکلیف کلاسی',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
                 Text(
                   'طراحی شده توسط دانیو',
                   style: TextStyle(
                     color: const Color(0xFF7CB342),
                     fontSize: 13,
-                  ),
-                ),
-                const Spacer(),
-                const Text(
-                  'تکلیف کلاسی',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ],
@@ -5802,7 +5819,7 @@ class _NextHomeworkContentState extends State<_NextHomeworkContent> {
     required List<String> subItems,
   }) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // Main question with number
         Row(
@@ -5812,7 +5829,7 @@ class _NextHomeworkContentState extends State<_NextHomeworkContent> {
             Expanded(
               child: Text(
                 mainText,
-                textAlign: TextAlign.right,
+                textAlign: TextAlign.start,
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 15,
@@ -5836,12 +5853,13 @@ class _NextHomeworkContentState extends State<_NextHomeworkContent> {
           const SizedBox(height: 16),
           // Sub items
           ...subItems.map((item) => Padding(
-                padding: const EdgeInsets.only(bottom: 10, left: 32),
+                padding:
+                    const EdgeInsetsDirectional.only(bottom: 10, start: 32),
                 child: Align(
-                  alignment: Alignment.centerRight,
+                  alignment: AlignmentDirectional.centerStart,
                   child: Text(
                     item,
-                    textAlign: TextAlign.right,
+                    textAlign: TextAlign.start,
                     style: TextStyle(
                       color: Colors.white.withOpacity(0.9),
                       fontSize: 14,
@@ -5926,7 +5944,7 @@ class _NextLessonPlanContent extends StatelessWidget {
                 ),
                 child: SingleChildScrollView(
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       // Title
                       const Text(
@@ -6038,7 +6056,7 @@ class _NextLessonPlanContent extends StatelessWidget {
     required String content,
   }) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // Title with number
         Text(
@@ -6053,7 +6071,7 @@ class _NextLessonPlanContent extends StatelessWidget {
         // Content
         Text(
           content,
-          textAlign: TextAlign.right,
+          textAlign: TextAlign.start,
           style: TextStyle(
             color: Colors.white.withOpacity(0.85),
             fontSize: 14,
@@ -6169,7 +6187,7 @@ class _LessonSessionCard extends StatelessWidget {
               flex: 4,
               child: Text(
                 description,
-                textAlign: TextAlign.right,
+                textAlign: TextAlign.start,
                 style: TextStyle(
                   color: status == 'not_started'
                       ? AppColors.textSecondary
@@ -6291,9 +6309,9 @@ class _VideoPlayerPlaceholder extends StatelessWidget {
             ),
           ),
           // Video controls (top-left in the video)
-          Positioned(
+          PositionedDirectional(
             top: 16,
-            left: 16,
+            start: 16,
             child: Row(
               children: [
                 _VideoControlButton(icon: Icons.fullscreen_rounded),
@@ -6361,7 +6379,7 @@ class _QuizContentState extends State<_QuizContent> {
               borderRadius: BorderRadius.circular(16),
             ),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Text(
                   'کوییز آموزشی',
@@ -6374,7 +6392,7 @@ class _QuizContentState extends State<_QuizContent> {
                 const SizedBox(height: 16),
                 Text(
                   _quizQuestion,
-                  textAlign: TextAlign.right,
+                  textAlign: TextAlign.start,
                   style: TextStyle(
                     color: Colors.white.withOpacity(0.9),
                     fontSize: 16,
@@ -6475,7 +6493,7 @@ class _QuizAnswerCard extends StatelessWidget {
             Expanded(
               child: Text(
                 text,
-                textAlign: TextAlign.right,
+                textAlign: TextAlign.start,
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 13,
@@ -6520,7 +6538,7 @@ class _TextContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildParagraph('تراز انرژی مثل طبقه‌های یک ساختمان هستند؛'),
           _buildParagraph(
@@ -6532,7 +6550,7 @@ class _TextContent extends StatelessWidget {
           const SizedBox(height: 24),
           const Text(
             'زیرلایه‌ها (s, p, d, f)',
-            textAlign: TextAlign.right,
+            textAlign: TextAlign.start,
             style: TextStyle(
               color: Colors.white,
               fontSize: 18,
@@ -6561,7 +6579,7 @@ class _TextContent extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 12),
       child: Text(
         text,
-        textAlign: TextAlign.right,
+        textAlign: TextAlign.start,
         style: TextStyle(
           color: Colors.white.withOpacity(0.9),
           fontSize: 16,
@@ -6575,26 +6593,26 @@ class _TextContent extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
+        mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Expanded(
-            child: Text(
-              text,
-              textAlign: TextAlign.right,
-              style: TextStyle(
-                color: Colors.white.withOpacity(0.9),
-                fontSize: 16,
-                height: 1.6,
-              ),
-            ),
-          ),
-          const SizedBox(width: 8),
           Text(
             '•',
             style: TextStyle(
               color: Colors.white.withOpacity(0.9),
               fontSize: 16,
+            ),
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              text,
+              textAlign: TextAlign.start,
+              style: TextStyle(
+                color: Colors.white.withOpacity(0.9),
+                fontSize: 16,
+                height: 1.6,
+              ),
             ),
           ),
         ],
@@ -6618,49 +6636,66 @@ class _TOCChapter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // Chapter header (RTL order)
-        Row(
-          children: [
-            // Chevron on left (end in RTL)
-            Icon(
-              isExpanded
-                  ? Icons.keyboard_arrow_up_rounded
-                  : Icons.keyboard_arrow_down_rounded,
-              color: AppColors.textSecondary,
-              size: 22,
+        FocusableItem(
+          onSelect: () {}, // Future expansion logic
+          builder: (isFocused) => AnimatedContainer(
+            duration: const Duration(milliseconds: 180),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+            decoration: BoxDecoration(
+              color: isFocused
+                  ? Colors.white.withOpacity(0.05)
+                  : Colors.transparent,
+              borderRadius: BorderRadius.circular(12),
             ),
-            const Spacer(),
-            // Title in middle
-            Text(
-              title,
-              style: const TextStyle(
-                color: AppColors.primary,
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-              ),
+            child: Row(
+              children: [
+                // Book icon on right (start in RTL)
+                Container(
+                  width: 32,
+                  height: 32,
+                  decoration: BoxDecoration(
+                    color: AppColors.primary.withOpacity(0.15),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: const Icon(
+                    Icons.folder_open_rounded,
+                    color: AppColors.primary,
+                    size: 18,
+                  ),
+                ),
+                const SizedBox(width: 12),
+                // Title next to icon
+                Expanded(
+                  child: Text(
+                    title,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                // Chevron
+                Icon(
+                  isExpanded
+                      ? Icons.expand_less_rounded
+                      : Icons.expand_more_rounded,
+                  color: Colors.white.withOpacity(0.3),
+                  size: 20,
+                ),
+              ],
             ),
-            const SizedBox(width: 10),
-            // Book icon on right (start in RTL)
-            Container(
-              width: 28,
-              height: 28,
-              decoration: BoxDecoration(
-                color: AppColors.primary.withOpacity(0.2),
-                borderRadius: BorderRadius.circular(6),
-              ),
-              child: const Icon(
-                Icons.menu_book_rounded,
-                color: AppColors.primary,
-                size: 16,
-              ),
-            ),
-          ],
+          ),
         ),
         if (isExpanded) ...[
-          const SizedBox(height: 10),
-          ...children,
+          const SizedBox(height: 8),
+          Padding(
+            padding: const EdgeInsets.only(right: 12),
+            child: Column(children: children),
+          ),
         ],
       ],
     );
@@ -6703,28 +6738,39 @@ class _TOCItem extends StatelessWidget {
         onSelect: onTap,
         builder: (isFocused) => AnimatedContainer(
           duration: const Duration(milliseconds: 180),
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           decoration: BoxDecoration(
             color: isSelected
                 ? AppColors.primary
                 : (isFocused
-                    ? AppColors.cardBackgroundLight
+                    ? Colors.white.withOpacity(0.08)
                     : Colors.transparent),
-            borderRadius: BorderRadius.circular(10),
-            border: Border.all(
-              color: isFocused && !isSelected
-                  ? AppColors.primary.withOpacity(0.5)
-                  : Colors.transparent,
-            ),
+            borderRadius: BorderRadius.circular(12),
+            boxShadow: isSelected
+                ? [
+                    BoxShadow(
+                      color: AppColors.primary.withOpacity(0.3),
+                      blurRadius: 8,
+                      offset: const Offset(0, 4),
+                    )
+                  ]
+                : [],
           ),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              // Title (expands from end in RTL)
+              // Icon (on right in RTL)
+              Icon(
+                _icon,
+                color: isSelected ? Colors.white : AppColors.textSecondary,
+                size: 18,
+              ),
+              const SizedBox(width: 10),
+              // Title (expands from start in RTL)
               Expanded(
                 child: Text(
                   title,
-                  textAlign: TextAlign.right,
+                  textAlign: TextAlign.start,
                   style: TextStyle(
                     color: isSelected ? Colors.white : AppColors.textSecondary,
                     fontSize: 13,
@@ -6732,13 +6778,6 @@ class _TOCItem extends StatelessWidget {
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
-              ),
-              const SizedBox(width: 10),
-              // Icon (on right in RTL)
-              Icon(
-                _icon,
-                color: isSelected ? Colors.white : AppColors.textSecondary,
-                size: 18,
               ),
             ],
           ),
@@ -7614,7 +7653,7 @@ class _LessonSummaryScreen extends StatelessWidget {
                             // Topics list
                             Expanded(
                               child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.end,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   const Text(
                                     'مطالبی که در این جلسه تدریس شد',
@@ -7715,7 +7754,7 @@ class _TopicCard extends StatelessWidget {
         border: Border.all(color: AppColors.cardBorder.withOpacity(0.3)),
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Header row
           Row(
