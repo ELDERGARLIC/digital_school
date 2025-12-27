@@ -60,6 +60,59 @@ class AppIcon extends StatelessWidget {
   }
 }
 
+class AppImages {
+  // Profiles
+  static const profile1 = 'assets/images/Profile 1.png';
+  static const profile2 = 'assets/images/Profile 2.png';
+  static const profile3 = 'assets/images/Profile 3.png';
+  static const profile4 = 'assets/images/Profile 4.png';
+  static const kasra = 'assets/images/kasra.png';
+  static const mohsen = 'assets/images/mohsen.png';
+  static const pezeshkian = 'assets/images/پزشکیان.png';
+
+  // Backgrounds & UI
+  static const background = 'assets/images/background.png';
+  static const logo = 'assets/images/logo.png';
+  static const searchResult = 'assets/images/Search result.png';
+  static const tvDark = 'assets/images/tv dark.png';
+  static const tvLight = 'assets/images/tv light.png';
+  static const lessonPlaceholder = 'assets/images/عکس درس.png';
+
+  // Subjects
+  static const math = 'assets/images/ریاضی.png';
+  static const science = 'assets/images/زیست شناسی.png';
+  static const chemistry = 'assets/images/شیمی.png';
+  static const literature = 'assets/images/ادبیات.png';
+  static const english = 'assets/images/زبان انگلیسی.png';
+  static const art = 'assets/images/هنر.png';
+  static const history = 'assets/images/تاریخ.png';
+  static const geography = 'assets/images/جغرافیا.png';
+  static const programming = 'assets/images/برنامه نویسی.png';
+  static const philosophy = 'assets/images/فلسفه.png';
+
+  // Class Actions
+  static const attendance = 'assets/images/فایل.png';
+  static const homeworkCheck1 = 'assets/images/بررسی تکالیف (1).png';
+  static const homeworkCheck2 = 'assets/images/بررسی تکالیف (2).png';
+  static const nextSessionHomework = 'assets/images/تکلیف جلسه بعد.png';
+  static const lessonPlan = 'assets/images/طرح درس.png';
+  static const nextSessionLessonPlan = 'assets/images/طرح درس جلسه بعد.png';
+  static const quiz = 'assets/images/امتحان کلاسی.png';
+  static const file = 'assets/images/فایل.png';
+
+  // Videos
+  static const video1 = 'assets/images/video 1.png';
+  static const video2 = 'assets/images/video 2.png';
+  static const video3 = 'assets/images/video 3.png';
+  static const video4 = 'assets/images/video 4.png';
+  static const video5 = 'assets/images/video 5.png';
+  static const video6 = 'assets/images/video 6.png';
+  static const video7 = 'assets/images/video 7.png';
+  static const video8 = 'assets/images/video 8.png';
+  static const video9 = 'assets/images/video 9.png';
+  static const video10 = 'assets/images/video 10.png';
+}
+
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([
@@ -336,12 +389,15 @@ class PrimaryButton extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(text,
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600)),
+            Flexible(
+              child: Text(text,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600),
+                  overflow: TextOverflow.ellipsis),
+            ),
             if (iconPath != null) ...[
               const SizedBox(width: 8),
               AppIcon(iconPath!, color: Colors.white, size: 20),
@@ -548,9 +604,9 @@ class ProfileSelectionScreen extends StatelessWidget {
   const ProfileSelectionScreen({super.key});
 
   static const List<Map<String, dynamic>> _profiles = [
-    {'name': 'هاشمی', 'color': Color(0xFF2E7D32)},
-    {'name': 'محمدی', 'color': Color(0xFF5D4037)},
-    {'name': 'فرهمند', 'color': Color(0xFF1A237E)},
+    {'name': 'هاشمی', 'image': AppImages.profile4, 'color': Color(0xFF2E7D32)},
+    {'name': 'محمدی', 'image': AppImages.profile1, 'color': Color(0xFF5D4037)},
+    {'name': 'فرهمند', 'image': AppImages.profile3, 'color': Color(0xFF1A237E)},
   ];
 
   @override
@@ -783,21 +839,26 @@ class _ProfileItem extends StatelessWidget {
             ),
             transform: Matrix4.identity()..scale(isFocused ? 1.08 : 1.0),
             transformAlignment: Alignment.center,
-            child: isDefault
-                ? const _DefaultAvatarIcon()
-                : Icon(Icons.person,
-                    size: 70, color: Colors.white.withOpacity(0.8)),
+            child: ClipOval(
+              child: isDefault
+                  ? const _DefaultAvatarIcon()
+                  : Image.asset(
+                      profile['image'] as String,
+                      width: 140,
+                      height: 140,
+                      fit: BoxFit.cover,
+                    ),
+            ),
           ),
           const SizedBox(height: 16),
-          AnimatedDefaultTextStyle(
-            duration: const Duration(milliseconds: 180),
+          Text(
+            profile['name'],
             style: TextStyle(
               color:
                   isFocused ? AppColors.textPrimary : AppColors.textSecondary,
               fontSize: 18,
               fontWeight: isFocused ? FontWeight.w600 : FontWeight.w400,
             ),
-            child: Text(profile['name']),
           ),
         ],
       ),
@@ -1672,6 +1733,7 @@ class _Sidebar extends StatelessWidget {
         child: expanded
             ? Row(
                 key: const ValueKey('expanded'),
+                mainAxisSize: MainAxisSize.min, // Added key fix
                 children: [
                   SizedBox(
                       width: 40,
@@ -1901,7 +1963,7 @@ class _PersianCalendarState extends State<PersianCalendar> {
             // Month title - centered
             Text(
                 'تقویم ${_getMonthName(_displayedMonth.month)} ${_toPersian(_displayedMonth.year)}',
-                style: TextStyle(
+                style: const TextStyle(
                     color: AppColors.textPrimary,
                     fontSize: 20,
                     fontWeight: FontWeight.w600)),
@@ -2116,21 +2178,21 @@ class _TodayLessonsSection extends StatelessWidget {
       'name': 'کلاس شیمی',
       'subtitle': 'ادامه درس پیوندها',
       'page': '۲۴',
-      'icon': Icons.science_rounded,
+      'image': AppImages.chemistry,
       'session': '۳',
     },
     {
       'name': 'کلاس ریاضی',
       'subtitle': 'ادامه درس اتحاد ها',
       'page': '۳۲',
-      'icon': Icons.calculate_rounded,
+      'image': AppImages.math,
       'session': '۵',
     },
     {
       'name': 'کلاس تاریخ',
       'subtitle': 'ادامه درس ۱۲',
       'page': '۳۰',
-      'icon': Icons.history_edu_rounded,
+      'image': AppImages.history,
       'session': '۲',
     },
   ];
@@ -2164,7 +2226,7 @@ class _TodayLessonsSection extends StatelessWidget {
                     name: course['name'] as String,
                     subtitle: course['subtitle'] as String,
                     page: course['page'] as String,
-                    icon: course['icon'] as IconData,
+                    imagePath: course['image'] as String,
                     autofocus: index == 0,
                     onSelect: () {
                       Navigator.of(context).push(_createRoute(
@@ -2173,6 +2235,7 @@ class _TodayLessonsSection extends StatelessWidget {
                           subtitle: course['subtitle'] as String,
                           session: course['session'] as String,
                           page: course['page'] as String,
+                          imagePath: course['image'] as String,
                           isGuest: isGuest,
                         ),
                       ));
@@ -2192,7 +2255,7 @@ class _CourseCard extends StatelessWidget {
   final String name;
   final String subtitle;
   final String page;
-  final IconData icon;
+  final String imagePath;
   final bool autofocus;
   final VoidCallback onSelect;
 
@@ -2200,7 +2263,7 @@ class _CourseCard extends StatelessWidget {
     required this.name,
     required this.subtitle,
     required this.page,
-    required this.icon,
+    required this.imagePath,
     this.autofocus = false,
     required this.onSelect,
   });
@@ -2239,39 +2302,17 @@ class _CourseCard extends StatelessWidget {
               TextDirection.ltr, // Force LTR so illustration is on left
           children: [
             // LEFT side - Illustration (clipped on the left edge)
+            // LEFT side - Image illustration
             SizedBox(
               width: 220,
-              child: Stack(
-                clipBehavior: Clip.none,
-                children: [
-                  // Monitor - positioned to extend past left edge
-                  Positioned(
-                    left: -40,
-                    top: 10,
-                    bottom: 10,
-                    child: _CardMonitor(courseName: name, isFocused: isFocused),
-                  ),
-                  // Book at bottom center
-                  Positioned(
-                    bottom: -15,
-                    left: 60,
-                    child: _CardBook(isFocused: isFocused),
-                  ),
-                  // Test tube for chemistry (top right of illustration area)
-                  if (name.contains('شیمی'))
-                    Positioned(
-                        top: 15,
-                        right: 10,
-                        child: _CardTestTube(isFocused: isFocused)),
-                  // Compass for math (top left, partially clipped)
-                  if (name.contains('ریاضی'))
-                    Positioned(
-                        top: 10,
-                        left: -10,
-                        child: _CardCompass(isFocused: isFocused)),
-                ],
+              height: double.infinity,
+              child: Image.asset(
+                imagePath,
+                fit: BoxFit.cover,
+                alignment: Alignment.centerRight,
               ),
             ),
+
             // RIGHT side - Text content (RTL for proper Persian text alignment)
             Expanded(
               child: Directionality(
@@ -2318,212 +2359,6 @@ class _CourseCard extends StatelessWidget {
   }
 }
 
-// Card monitor illustration
-class _CardMonitor extends StatelessWidget {
-  final String courseName;
-  final bool isFocused;
-  const _CardMonitor({required this.courseName, required this.isFocused});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        // Monitor screen
-        Container(
-          width: 180,
-          height: 110,
-          decoration: BoxDecoration(
-            color: const Color(0xFF1E4A70),
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: const Color(0xFF3A7AAC), width: 6),
-          ),
-          padding: const EdgeInsets.all(12),
-          child: _getFormulas(),
-        ),
-        // Monitor stand
-        Container(width: 28, height: 18, color: const Color(0xFF3A7AAC)),
-        // Monitor base
-        Container(
-          width: 55,
-          height: 5,
-          decoration: BoxDecoration(
-              color: const Color(0xFF2A5A8C),
-              borderRadius: BorderRadius.circular(3)),
-        ),
-      ],
-    );
-  }
-
-  Widget _getFormulas() {
-    if (courseName.contains('شیمی')) {
-      return const Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('CH₂+H₂→CH₄',
-              style: TextStyle(
-                  color: Colors.white, fontSize: 11, fontFamily: 'Yekan')),
-          Text('HCl→H⁺+Cl⁻',
-              style: TextStyle(
-                  color: Colors.white, fontSize: 10, fontFamily: 'Yekan')),
-          Text('H₂SO₄→2H⁺+SO₄²⁻',
-              style: TextStyle(
-                  color: Colors.white, fontSize: 9, fontFamily: 'Yekan')),
-        ],
-      );
-    } else if (courseName.contains('ریاضی')) {
-      return const Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Text('a²+b²=c²',
-              style: TextStyle(
-                  color: Colors.white, fontSize: 12, fontFamily: 'Yekan')),
-          Text('f(x)',
-              style: TextStyle(
-                  color: Colors.white, fontSize: 11, fontFamily: 'Yekan')),
-          Text('x=−b±√b²−4ac/2a',
-              style: TextStyle(
-                  color: Colors.white, fontSize: 9, fontFamily: 'Yekan')),
-        ],
-      );
-    }
-    return const Column(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        Text('تاریخ ایران',
-            style: TextStyle(color: Colors.white, fontSize: 12)),
-        Text('۱۴۰۴', style: TextStyle(color: Colors.white, fontSize: 11)),
-      ],
-    );
-  }
-}
-
-// Book that clips outside card
-class _CardBook extends StatelessWidget {
-  final bool isFocused;
-  const _CardBook({required this.isFocused});
-
-  @override
-  Widget build(BuildContext context) {
-    return CustomPaint(
-      size: const Size(90, 45),
-      painter: _BookPainter(
-          color: isFocused ? const Color(0xFF4A9AD8) : const Color(0xFF3A6A9C)),
-    );
-  }
-}
-
-class _BookPainter extends CustomPainter {
-  final Color color;
-  _BookPainter({required this.color});
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = color
-      ..style = PaintingStyle.fill;
-    final leftPage = Path()
-      ..moveTo(size.width / 2, size.height * 0.2)
-      ..quadraticBezierTo(size.width * 0.2, 0, 0, size.height * 0.3)
-      ..lineTo(0, size.height)
-      ..lineTo(size.width / 2, size.height * 0.8)
-      ..close();
-    canvas.drawPath(leftPage, paint);
-    final rightPage = Path()
-      ..moveTo(size.width / 2, size.height * 0.2)
-      ..quadraticBezierTo(size.width * 0.8, 0, size.width, size.height * 0.3)
-      ..lineTo(size.width, size.height)
-      ..lineTo(size.width / 2, size.height * 0.8)
-      ..close();
-    canvas.drawPath(rightPage, paint);
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
-}
-
-// Test tube illustration
-class _CardTestTube extends StatelessWidget {
-  final bool isFocused;
-  const _CardTestTube({required this.isFocused});
-
-  @override
-  Widget build(BuildContext context) {
-    return CustomPaint(
-      size: const Size(18, 55),
-      painter: _TubePainter(
-          color: isFocused ? const Color(0xFF4A9AD8) : const Color(0xFF3A6A9C)),
-    );
-  }
-}
-
-class _TubePainter extends CustomPainter {
-  final Color color;
-  _TubePainter({required this.color});
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    canvas.drawRRect(
-      RRect.fromRectAndCorners(
-          Rect.fromLTWH(2, 5, size.width - 4, size.height - 5),
-          bottomLeft: const Radius.circular(8),
-          bottomRight: const Radius.circular(8)),
-      Paint()..color = color,
-    );
-    canvas.drawRRect(
-      RRect.fromRectAndCorners(
-          Rect.fromLTWH(
-              4, size.height * 0.5, size.width - 8, size.height * 0.45),
-          bottomLeft: const Radius.circular(6),
-          bottomRight: const Radius.circular(6)),
-      Paint()..color = const Color(0xFF6AB4F4),
-    );
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
-}
-
-// Compass illustration
-class _CardCompass extends StatelessWidget {
-  final bool isFocused;
-  const _CardCompass({required this.isFocused});
-
-  @override
-  Widget build(BuildContext context) {
-    return CustomPaint(
-      size: const Size(40, 60),
-      painter: _CompassDrawPainter(
-          color: isFocused ? const Color(0xFF4A9AD8) : const Color(0xFF3A6A9C)),
-    );
-  }
-}
-
-class _CompassDrawPainter extends CustomPainter {
-  final Color color;
-  _CompassDrawPainter({required this.color});
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = color
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 3;
-    canvas.drawLine(
-        Offset(size.width / 2, 8), Offset(4, size.height - 4), paint);
-    canvas.drawLine(Offset(size.width / 2, 8),
-        Offset(size.width - 4, size.height - 4), paint);
-    canvas.drawCircle(
-        Offset(size.width / 2, 8), 5, paint..style = PaintingStyle.fill);
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
-}
-
 // ============================================================================
 // COURSE DETAIL SECTION
 // ============================================================================
@@ -2533,24 +2368,6 @@ class _CourseDetailSection extends StatelessWidget {
   final VoidCallback onBack;
 
   const _CourseDetailSection({required this.courseName, required this.onBack});
-
-  static const _persianDigits = [
-    '۰',
-    '۱',
-    '۲',
-    '۳',
-    '۴',
-    '۵',
-    '۶',
-    '۷',
-    '۸',
-    '۹'
-  ];
-  String _toPersian(int number) => number
-      .toString()
-      .split('')
-      .map((d) => _persianDigits[int.parse(d)])
-      .join();
 
   @override
   Widget build(BuildContext context) {
@@ -2866,9 +2683,9 @@ class _PresidentialMessageDialogState extends State<PresidentialMessageDialog>
                             border: Border.all(
                                 color: AppColors.cardBorder, width: 2),
                           ),
-                          child: const ClipOval(
-                              child: Icon(Icons.person,
-                                  size: 36, color: AppColors.textSecondary)),
+                          child: ClipOval(
+                              child: Image.asset(AppImages.pezeshkian,
+                                  fit: BoxFit.cover)),
                         ),
                         const SizedBox(width: 16),
                         const Text('پیام دکتر پزشکیان',
@@ -2967,6 +2784,7 @@ class SingleClassScreen extends StatefulWidget {
   final String subtitle;
   final String session;
   final String page;
+  final String? imagePath;
   final bool isGuest;
 
   const SingleClassScreen({
@@ -2975,6 +2793,7 @@ class SingleClassScreen extends StatefulWidget {
     required this.subtitle,
     required this.session,
     required this.page,
+    this.imagePath,
     this.isGuest = false,
   });
 
@@ -2989,133 +2808,158 @@ class _SingleClassScreenState extends State<SingleClassScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: NoiseBackground(
-        child: Row(
-          textDirection: TextDirection.ltr,
-          children: [
-            // MAIN CONTENT - pushes left when sidebar expands
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(40, 32, 24, 40),
-                child: Column(
-                  children: [
-                    // Header with back button (on the right in RTL)
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        _BackButton(
-                            onPressed: () => Navigator.of(context).pop()),
-                      ],
-                    ),
-                    const SizedBox(height: 24),
-                    // Main content area
-                    Expanded(
-                      child: Row(
-                        textDirection: TextDirection.rtl,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // Right side - Class info
-                          Expanded(
-                            flex: 2,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                // Title row
-                                Row(
-                                  children: [
-                                    Text(
-                                      widget.className,
-                                      style: const TextStyle(
-                                        color: AppColors.textPrimary,
-                                        fontSize: 36,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    const SizedBox(width: 16),
-                                    Text(
-                                      'جلسه ${widget.session}',
-                                      style: const TextStyle(
-                                        color: AppColors.primary,
-                                        fontSize: 24,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(height: 16),
-                                Text(
-                                  widget.subtitle,
-                                  style: const TextStyle(
-                                    color: AppColors.textPrimary,
-                                    fontSize: 20,
-                                  ),
-                                ),
-                                const SizedBox(height: 12),
-                                Row(
-                                  children: [
-                                    const Icon(Icons.access_time_rounded,
-                                        size: 18,
-                                        color: AppColors.textSecondary),
-                                    const SizedBox(width: 8),
-                                    Text(
-                                      'آخرین مطلب گفته شده: تا سر صفحه ${widget.page}',
-                                      style: const TextStyle(
-                                        color: AppColors.textSecondary,
-                                        fontSize: 14,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(height: 32),
-                                PrimaryButton(
-                                  text: 'شروع کلاس',
-                                  iconPath: AppIcons.startClass,
-                                  autofocus: true,
-                                  onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      _createRoute(ClassSessionScreen(
-                                        className: widget.className,
-                                        isGuest: widget.isGuest,
-                                      )),
-                                    );
-                                  },
-                                ),
-                              ],
-                            ),
-                          ),
-                          // Left side - Illustration
-                          Expanded(
-                            flex: 3,
-                            child:
-                                _ClassIllustration(className: widget.className),
-                          ),
-                        ],
-                      ),
-                    ),
-                    // Bottom action cards grid
-                    const SizedBox(height: 24),
-                    _ClassActionGrid(
-                      className: widget.className,
-                      isGuest: widget.isGuest,
-                    ),
-                  ],
+      body: Stack(
+        children: [
+          // Background Image
+          if (widget.imagePath != null)
+            Positioned.fill(
+              child: Opacity(
+                opacity: 0.15,
+                child: Image.asset(
+                  widget.imagePath!,
+                  fit: BoxFit.cover,
                 ),
               ),
             ),
-            // SIDEBAR - pushes content when expanded
-            _Sidebar(
-              expanded: _sidebarExpanded,
-              selectedIndex: _selectedNavIndex,
-              onHover: (e) => setState(() => _sidebarExpanded = e),
-              onSelect: (i) => setState(() => _selectedNavIndex = i),
-              onLogout: () => Navigator.of(context).pushAndRemoveUntil(
-                  _createRoute(const ProfileSelectionScreen()),
-                  (route) => false),
-              isGuest: widget.isGuest,
+
+          NoiseBackground(
+            child: Row(
+              textDirection: TextDirection.ltr,
+              children: [
+                // MAIN CONTENT - pushes left when sidebar expands
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(40, 32, 24, 40),
+                    child: Column(
+                      children: [
+                        // Header with back button (on the right in RTL)
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            _BackButton(
+                                onPressed: () => Navigator.of(context).pop()),
+                          ],
+                        ),
+                        const SizedBox(height: 24),
+                        // Main content area
+                        Expanded(
+                          child: Row(
+                            textDirection: TextDirection.rtl,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              // Right side - Class info
+                              Expanded(
+                                flex: 2,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    // Title row
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          widget.className,
+                                          style: const TextStyle(
+                                            color: AppColors.textPrimary,
+                                            fontSize: 36,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                        const SizedBox(width: 24),
+                                        Text(
+                                          'جلسه ${widget.session}',
+                                          style: const TextStyle(
+                                            color: AppColors.primary,
+                                            fontSize: 24,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 16),
+                                    Text(
+                                      widget.subtitle,
+                                      style: const TextStyle(
+                                        color: AppColors.textPrimary,
+                                        fontSize: 20,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 12),
+                                    Row(
+                                      children: [
+                                        const Icon(Icons.access_time_rounded,
+                                            size: 18,
+                                            color: AppColors.textSecondary),
+                                        const SizedBox(width: 8),
+                                        Expanded(
+                                          child: Text(
+                                            'آخرین مطلب گفته شده: تا سر صفحه ${widget.page}',
+                                            style: const TextStyle(
+                                              color: AppColors.textSecondary,
+                                              fontSize: 14,
+                                            ),
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 32),
+                                    PrimaryButton(
+                                      text: 'شروع کلاس',
+                                      iconPath: AppIcons.startClass,
+                                      autofocus: true,
+                                      onPressed: () {
+                                        Navigator.push(
+                                          context,
+                                          _createRoute(ClassSessionScreen(
+                                            className: widget.className,
+                                            isGuest: widget.isGuest,
+                                          )),
+                                        );
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              // Left side - Illustration
+                              Expanded(
+                                flex: 3,
+                                child: _ClassIllustration(
+                                    className: widget.className,
+                                    imagePath: widget.imagePath),
+                              ),
+                            ],
+                          ),
+                        ),
+                        // Bottom action cards grid
+                        const SizedBox(height: 24),
+                        _ClassActionGrid(
+                          className: widget.className,
+                          isGuest: widget.isGuest,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                // SIDEBAR - pushes content when expanded
+                _Sidebar(
+                  expanded: _sidebarExpanded,
+                  selectedIndex: _selectedNavIndex,
+                  onHover: (e) => setState(() => _sidebarExpanded = e),
+                  onSelect: (i) => setState(() => _selectedNavIndex = i),
+                  onLogout: () => Navigator.of(context).pushAndRemoveUntil(
+                      _createRoute(const ProfileSelectionScreen()),
+                      (route) => false),
+                  isGuest: widget.isGuest,
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -3163,7 +3007,9 @@ class _BackButton extends StatelessWidget {
 
 class _ClassIllustration extends StatelessWidget {
   final String className;
-  const _ClassIllustration({required this.className});
+  final String? imagePath;
+
+  const _ClassIllustration({required this.className, this.imagePath});
 
   @override
   Widget build(BuildContext context) {
@@ -3176,9 +3022,14 @@ class _ClassIllustration extends StatelessWidget {
             width: 420,
             height: 280,
             decoration: BoxDecoration(
-              color: const Color(0xFF2A5A8C),
+              color: imagePath == null ? const Color(0xFF2A5A8C) : null,
+              image: imagePath != null
+                  ? DecorationImage(
+                      image: AssetImage(imagePath!), fit: BoxFit.cover)
+                  : null,
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: const Color(0xFF4A7AAC), width: 8),
+              // Removed transparent border or reduced it if needed, but user said 'remove old blue things'
+              // border: Border.all(color: const Color(0xFF4A7AAC), width: 8),
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withOpacity(0.3),
@@ -3187,47 +3038,14 @@ class _ClassIllustration extends StatelessWidget {
                 ),
               ],
             ),
-            child: Padding(
-              padding: const EdgeInsets.all(20),
-              child: _getFormulasForClass(className),
-            ),
-          ),
-          // Monitor stand
-          Positioned(
-            bottom: -40,
-            child: Column(
-              children: [
-                Container(
-                  width: 80,
-                  height: 40,
-                  decoration: const BoxDecoration(
-                    color: Color(0xFF4A7AAC),
-                    borderRadius:
-                        BorderRadius.vertical(bottom: Radius.circular(8)),
-                  ),
-                ),
-                Container(
-                  width: 160,
-                  height: 12,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF3A6A9C),
-                    borderRadius: BorderRadius.circular(6),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          // Lab equipment on left
-          Positioned(
-            left: -80,
-            bottom: -20,
-            child: _LabEquipment(),
-          ),
-          // Cloud decoration
-          Positioned(
-            bottom: -30,
-            right: 40,
-            child: _CloudDecoration(),
+            // Show formulas only if NO image is present (legacy fallback), or remove entirely?
+            // User said "just images should be there".
+            child: imagePath == null
+                ? Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: _getFormulasForClass(className),
+                  )
+                : null,
           ),
         ],
       ),
@@ -3352,102 +3170,6 @@ class _MoleculePainter extends CustomPainter {
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
 
-class _LabEquipment extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: 100,
-      height: 120,
-      child: CustomPaint(painter: _LabEquipmentPainter()),
-    );
-  }
-}
-
-class _LabEquipmentPainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    // Beaker
-    final beakerPaint = Paint()
-      ..color = const Color(0xFF4A8AC4)
-      ..style = PaintingStyle.fill;
-
-    final beakerPath = Path()
-      ..moveTo(20, 40)
-      ..lineTo(15, 100)
-      ..lineTo(55, 100)
-      ..lineTo(50, 40)
-      ..close();
-    canvas.drawPath(beakerPath, beakerPaint);
-
-    // Beaker liquid
-    final liquidPaint = Paint()
-      ..color = const Color(0xFF6AB4F4)
-      ..style = PaintingStyle.fill;
-    final liquidPath = Path()
-      ..moveTo(18, 60)
-      ..lineTo(16, 98)
-      ..lineTo(54, 98)
-      ..lineTo(52, 60)
-      ..close();
-    canvas.drawPath(liquidPath, liquidPaint);
-
-    // Flask
-    final flaskPaint = Paint()
-      ..color = const Color(0xFF4A8AC4)
-      ..style = PaintingStyle.fill;
-
-    // Flask body
-    canvas.drawOval(
-        Rect.fromCenter(center: const Offset(75, 90), width: 40, height: 30),
-        flaskPaint);
-
-    // Flask neck
-    canvas.drawRect(const Rect.fromLTWH(70, 50, 10, 45), flaskPaint);
-
-    // Flask liquid
-    canvas.drawOval(
-      Rect.fromCenter(center: const Offset(75, 92), width: 35, height: 22),
-      Paint()..color = const Color(0xFF6AB4F4),
-    );
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
-}
-
-class _CloudDecoration extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: 120,
-      height: 60,
-      child: CustomPaint(painter: _CloudPainter()),
-    );
-  }
-}
-
-class _CloudPainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = const Color(0xFF5A9AD4).withOpacity(0.5)
-      ..style = PaintingStyle.fill;
-
-    canvas.drawOval(
-        Rect.fromCenter(center: const Offset(30, 40), width: 50, height: 35),
-        paint);
-    canvas.drawOval(
-        Rect.fromCenter(center: const Offset(60, 35), width: 60, height: 40),
-        paint);
-    canvas.drawOval(
-        Rect.fromCenter(center: const Offset(90, 40), width: 50, height: 35),
-        paint);
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
-}
-
 class _ClassActionGrid extends StatelessWidget {
   final String className;
   final bool isGuest;
@@ -3458,15 +3180,31 @@ class _ClassActionGrid extends StatelessWidget {
   Widget build(BuildContext context) {
     final actions = [
       {
-        'icon': AppIcons.sessionAttendance,
+        'icon': AppImages.attendance,
         'label': 'حضور و غیاب کلاسی',
         'tabIndex': 0
       },
-      {'icon': AppIcons.files, 'label': 'بررسی تکالیف', 'tabIndex': 1},
-      {'icon': AppIcons.headline, 'label': 'طرح درس این جلسه', 'tabIndex': 2},
-      {'icon': AppIcons.quiz, 'label': 'امتحان کلاسی', 'tabIndex': 3},
-      {'icon': AppIcons.files, 'label': 'تکلیف جلسه بعد', 'tabIndex': 4},
-      {'icon': AppIcons.headline, 'label': 'طرح درس جلسه بعد', 'tabIndex': 5},
+      {
+        'icon': AppImages.homeworkCheck1,
+        'label': 'بررسی تکالیف',
+        'tabIndex': 1
+      },
+      {
+        'icon': AppImages.lessonPlan,
+        'label': 'طرح درس این جلسه',
+        'tabIndex': 2
+      },
+      {'icon': AppImages.quiz, 'label': 'امتحان کلاسی', 'tabIndex': 3},
+      {
+        'icon': AppImages.nextSessionHomework,
+        'label': 'تکلیف جلسه بعد',
+        'tabIndex': 4
+      },
+      {
+        'icon': AppImages.nextSessionLessonPlan,
+        'label': 'طرح درس جلسه بعد',
+        'tabIndex': 5
+      },
     ];
 
     return SizedBox(
@@ -3584,12 +3322,15 @@ class _ActionCard extends StatelessWidget {
             _ActionIcon(iconPath: iconPath, isFocused: isFocused),
             const Spacer(),
             // Text on the right
-            Text(
-              label,
-              style: TextStyle(
-                color: isFocused ? Colors.white : AppColors.textPrimary,
-                fontSize: 18,
-                fontWeight: isFocused ? FontWeight.w600 : FontWeight.w500,
+            Flexible(
+              child: Text(
+                label,
+                style: TextStyle(
+                  color: isFocused ? Colors.white : AppColors.textPrimary,
+                  fontSize: 18,
+                  fontWeight: isFocused ? FontWeight.w600 : FontWeight.w500,
+                ),
+                overflow: TextOverflow.ellipsis,
               ),
             ),
           ],
@@ -3610,55 +3351,14 @@ class _ActionIcon extends StatelessWidget {
     return SizedBox(
       width: 55,
       height: 55,
-      child: CustomPaint(
-        painter: _ActionIconPainter(isFocused: isFocused),
-        child: Center(
-          child: AppIcon(
-            iconPath,
-            size: 28,
-            color:
-                isFocused ? const Color(0xFF6AB4F4) : const Color(0xFF4A9AD8),
-          ),
-        ),
+      child: Image.asset(
+        iconPath,
+        width: 55,
+        height: 55,
+        fit: BoxFit.contain,
       ),
     );
   }
-}
-
-class _ActionIconPainter extends CustomPainter {
-  final bool isFocused;
-  _ActionIconPainter({required this.isFocused});
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final color = isFocused ? const Color(0xFF4A9AD8) : const Color(0xFF4A7AAC);
-    final paint = Paint()
-      ..color = color.withOpacity(0.3)
-      ..style = PaintingStyle.fill;
-
-    // Draw clipboard shape
-    final clipboardPath = Path()
-      ..addRRect(RRect.fromRectAndRadius(
-        Rect.fromLTWH(8, 8, size.width - 16, size.height - 12),
-        const Radius.circular(6),
-      ));
-    canvas.drawPath(clipboardPath, paint);
-
-    // Draw clip at top
-    final clipPaint = Paint()
-      ..color = color.withOpacity(0.5)
-      ..style = PaintingStyle.fill;
-    canvas.drawRRect(
-      RRect.fromRectAndRadius(
-        Rect.fromLTWH(size.width / 2 - 12, 4, 24, 10),
-        const Radius.circular(3),
-      ),
-      clipPaint,
-    );
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
 
 // ============================================================================
@@ -3702,6 +3402,7 @@ class _ClassSessionScreenState extends State<ClassSessionScreen> {
   static const _students = [
     {
       'name': 'کسری کشوردوست',
+      'imagePath': AppImages.kasra,
       'present': 30,
       'absent': 6,
       'late': 1,
@@ -3709,6 +3410,7 @@ class _ClassSessionScreenState extends State<ClassSessionScreen> {
     },
     {
       'name': 'محسن کلانتری',
+      'imagePath': AppImages.mohsen,
       'present': 6,
       'absent': 3,
       'late': 1,
@@ -3716,6 +3418,7 @@ class _ClassSessionScreenState extends State<ClassSessionScreen> {
     },
     {
       'name': 'علی محمدی',
+      'imagePath': AppImages.profile1,
       'present': 25,
       'absent': 4,
       'late': 2,
@@ -3783,10 +3486,6 @@ class _ClassSessionScreenState extends State<ClassSessionScreen> {
         },
       ),
     );
-  }
-
-  void _completeAttendance() {
-    setState(() => _showAttendanceSuccess = true);
   }
 
   Widget _buildTabContent() {
@@ -4152,7 +3851,10 @@ class _AttendanceContent extends StatelessWidget {
           ),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(15),
-            child: const _StudentAvatar(size: 200),
+            child: _StudentAvatar(
+              size: 200,
+              imagePath: student['imagePath'] as String?,
+            ),
           ),
         ),
         const SizedBox(width: 40),
@@ -4467,11 +4169,11 @@ class _StudentStatusChart extends StatelessWidget {
           notSolved: notSolved,
           notSent: notSent,
         ),
-        child: Center(
+        child: const Center(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Text(
+              Text(
                 'وضعیت',
                 style: TextStyle(
                   color: Colors.white,
@@ -4479,7 +4181,7 @@ class _StudentStatusChart extends StatelessWidget {
                   fontWeight: FontWeight.w500,
                 ),
               ),
-              const Text(
+              Text(
                 'دانش‌آموزان',
                 style: TextStyle(
                   color: Colors.white,
@@ -4514,7 +4216,7 @@ class _DonutChartPainter extends CustomPainter {
 
     final center = Offset(size.width / 2, size.height / 2);
     final radius = size.width / 2;
-    final strokeWidth = 28.0;
+    const strokeWidth = 28.0;
 
     final paint = Paint()
       ..style = PaintingStyle.stroke
@@ -4528,7 +4230,7 @@ class _DonutChartPainter extends CustomPainter {
     final notSentAngle = (notSent / total) * 2 * math.pi;
 
     // Draw segments with small gaps
-    final gap = 0.04; // Gap between segments
+    const gap = 0.04; // Gap between segments
 
     // Draw solved (green)
     paint.color = const Color(0xFF4CAF50);
@@ -4666,7 +4368,7 @@ class _LessonPlanContent extends StatelessWidget {
   });
 
   // Lesson content items - flattened for easy selection
-  static const _lessonItems = [
+  static const List<Map<String, dynamic>> _lessonItems = [
     {
       'title': 'ترازهای انرژی؛ خانه‌های اصلی الکترون‌ها',
       'type': 'text',
@@ -4677,14 +4379,16 @@ class _LessonPlanContent extends StatelessWidget {
       'title': 'آشنایی سریع با منطق مدل کوانتومی',
       'type': 'video',
       'duration': '۱۰ دقیقه',
-      'chapter': 'مقدمه‌ای بر مدل کوانتومی'
+      'chapter': 'مقدمه‌ای بر مدل کوانتومی',
+      'thumbnail': AppImages.video1
     },
     {
       'title': 'آزمایش سوختن آهن و اکسیژن',
       'type': 'experiment',
       'duration': null,
       'chapter': 'مقدمه‌ای بر مدل کوانتومی',
-      'designer': 'آروین'
+      'designer': 'آروین',
+      'thumbnail': AppImages.video2
     },
     {
       'title': 'کوییز کوتاه از بخش',
@@ -4800,8 +4504,9 @@ class _LessonPlanContent extends StatelessWidget {
         const SizedBox(height: 16),
         // Main content
         Expanded(
-          child:
-              showSessionsList ? _buildSessionsList() : _buildLessonContent(),
+          child: showSessionsList
+              ? _buildSessionsList()
+              : _buildLessonContent(context),
         ),
       ],
     );
@@ -4823,7 +4528,7 @@ class _LessonPlanContent extends StatelessWidget {
     );
   }
 
-  Widget _buildLessonContent() {
+  Widget _buildLessonContent(BuildContext context) {
     final currentItem = _lessonItems[selectedItemIndex];
     final itemType = currentItem['type'] as String;
 
@@ -4896,7 +4601,7 @@ class _LessonPlanContent extends StatelessWidget {
               border: Border.all(color: AppColors.cardBorder.withOpacity(0.3)),
             ),
             child: itemType == 'quiz'
-                ? _buildQuizScrollableContent(currentItem)
+                ? _buildQuizScrollableContent(context, currentItem)
                 : Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -4958,7 +4663,8 @@ class _LessonPlanContent extends StatelessWidget {
     );
   }
 
-  Widget _buildQuizScrollableContent(Map<String, dynamic> currentItem) {
+  Widget _buildQuizScrollableContent(
+      BuildContext context, Map<String, dynamic> currentItem) {
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -4969,7 +4675,7 @@ class _LessonPlanContent extends StatelessWidget {
           // Quiz content
           _QuizContent(designer: currentItem['designer'] as String?),
           // Navigation buttons
-          _buildQuizNavigation(),
+          _buildQuizNavigation(context),
         ],
       ),
     );
@@ -4979,7 +4685,8 @@ class _LessonPlanContent extends StatelessWidget {
     switch (type) {
       case 'video':
       case 'experiment':
-        return const _VideoPlayerPlaceholder();
+        return _VideoPlayerPlaceholder(
+            thumbnailPath: item['thumbnail'] as String?);
       case 'text':
         return const _TextContent();
       default:
@@ -4992,7 +4699,7 @@ class _LessonPlanContent extends StatelessWidget {
     }
   }
 
-  Widget _buildQuizNavigation() {
+  Widget _buildQuizNavigation(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 20),
       child: Row(
@@ -5033,7 +4740,10 @@ class _LessonPlanContent extends StatelessWidget {
           Expanded(
             flex: 2,
             child: FocusableItem(
-              onSelect: () {},
+              onSelect: () => showDialog(
+                context: context,
+                builder: (context) => const _OverviewDialog(),
+              ),
               builder: (isFocused) => AnimatedContainer(
                 duration: const Duration(milliseconds: 180),
                 padding:
@@ -5194,7 +4904,7 @@ class _ClassExamContentState extends State<_ClassExamContent> {
                         ),
                         child: Stack(
                           children: [
-                            Positioned.fill(
+                            const Positioned.fill(
                               child: Icon(
                                 Icons.description_rounded,
                                 color: AppColors.primary,
@@ -5217,7 +4927,7 @@ class _ClassExamContentState extends State<_ClassExamContent> {
                         ),
                       ),
                       const SizedBox(height: 24),
-                      Text(
+                      const Text(
                         'اگر قبلاً فایل سؤالات را در سامانه بارگذاری کرده‌اید،\nاین گزینه را انتخاب کنید تا همان فایل استفاده شود.',
                         textAlign: TextAlign.center,
                         style: TextStyle(
@@ -5317,7 +5027,7 @@ class _ClassExamContentState extends State<_ClassExamContent> {
                               ),
                             ),
                             const SizedBox(height: 20),
-                            Text(
+                            const Text(
                               'مراحل بعدی طراحی و مدیریت امتحان از طریق موبایل شما\nانجام می‌شود و نتیجه روی همین صفحه نمایش داده\nخواهد شد.',
                               textAlign: TextAlign.start,
                               style: TextStyle(
@@ -5341,7 +5051,7 @@ class _ClassExamContentState extends State<_ClassExamContent> {
   }
 
   Widget _buildQuestionsView() {
-    return SingleChildScrollView(
+    return const SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -5357,7 +5067,7 @@ class _ClassExamContentState extends State<_ClassExamContent> {
                     Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const Text(
+                        Text(
                           'امتحان کلاسی',
                           style: TextStyle(
                             color: Colors.white,
@@ -5365,11 +5075,11 @@ class _ClassExamContentState extends State<_ClassExamContent> {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        const SizedBox(width: 16),
+                        SizedBox(width: 16),
                         Text(
                           'طراحی شده توسط پامادان',
                           style: TextStyle(
-                            color: const Color(0xFF7CB342),
+                            color: Color(0xFF7CB342),
                             fontSize: 13,
                           ),
                         ),
@@ -5382,10 +5092,10 @@ class _ClassExamContentState extends State<_ClassExamContent> {
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Icon(Icons.access_time_rounded,
+                  Icon(Icons.access_time_rounded,
                       color: AppColors.primary, size: 20),
-                  const SizedBox(width: 8),
-                  const Text(
+                  SizedBox(width: 8),
+                  Text(
                     'مدت زمان امتحان: ۲۰:۰۰ دقیقه',
                     style:
                         TextStyle(color: AppColors.textSecondary, fontSize: 14),
@@ -5394,9 +5104,9 @@ class _ClassExamContentState extends State<_ClassExamContent> {
               ),
             ],
           ),
-          const SizedBox(height: 32),
+          SizedBox(height: 32),
           // Question 1 - Multiple choice
-          const Text(
+          Text(
             '۱. مهم‌ترین تفاوت مدل بور و مدل کوانتومی در توصیف حرکت الکترون چیست؟',
             textAlign: TextAlign.start,
             style: TextStyle(
@@ -5405,7 +5115,7 @@ class _ClassExamContentState extends State<_ClassExamContent> {
               fontWeight: FontWeight.w500,
             ),
           ),
-          const SizedBox(height: 20),
+          SizedBox(height: 20),
           // Answer options - Row 1 (options 1 and 2)
           Row(
             children: [
@@ -5417,7 +5127,7 @@ class _ClassExamContentState extends State<_ClassExamContent> {
                       'مدل بور شعاع ثابت برای الکترون تعیین می‌کند، مدل کوانتومی فقط احتمال حضور را مشخص می‌کند.',
                 ),
               ),
-              const SizedBox(width: 16),
+              SizedBox(width: 16),
               // Option 1 on right
               Expanded(
                 child: _ExamAnswerCard(
@@ -5428,7 +5138,7 @@ class _ClassExamContentState extends State<_ClassExamContent> {
               ),
             ],
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           // Answer options - Row 2 (options 3 and 4)
           Row(
             children: [
@@ -5439,7 +5149,7 @@ class _ClassExamContentState extends State<_ClassExamContent> {
                   text: 'مدل کوانتومی وجود اوربیتال‌ها را رد می‌کند.',
                 ),
               ),
-              const SizedBox(width: 16),
+              SizedBox(width: 16),
               // Option 3 on right
               Expanded(
                 child: _ExamAnswerCard(
@@ -5450,9 +5160,9 @@ class _ClassExamContentState extends State<_ClassExamContent> {
               ),
             ],
           ),
-          const SizedBox(height: 36),
+          SizedBox(height: 36),
           // Question 2 - Text question
-          const Text(
+          Text(
             '۲. تابع موج در مدل کوانتومی چه چیزی را نشان می‌دهد و چرا مقدار آن به‌تنهایی معنای فیزیکی ندارد؟',
             textAlign: TextAlign.start,
             style: TextStyle(
@@ -5462,9 +5172,9 @@ class _ClassExamContentState extends State<_ClassExamContent> {
               height: 1.7,
             ),
           ),
-          const SizedBox(height: 36),
+          SizedBox(height: 36),
           // Question 3 - Text question
-          const Text(
+          Text(
             '۳. نقش اعداد کوانتومی را در مشخص کردن وضعیت یک الکترون در اتم توضیح بده. توضیح بده هر عدد کوانتومی چه اطلاعاتی می‌دهد و این چهار عدد چگونه با هم یک حالت الکترونی کامل را تعریف می‌کنند.',
             textAlign: TextAlign.start,
             style: TextStyle(
@@ -5665,7 +5375,7 @@ class _NextHomeworkContentState extends State<_NextHomeworkContent> {
                         ),
                         child: Stack(
                           children: [
-                            Positioned.fill(
+                            const Positioned.fill(
                               child: Icon(
                                 Icons.description_rounded,
                                 color: AppColors.primary,
@@ -5688,7 +5398,7 @@ class _NextHomeworkContentState extends State<_NextHomeworkContent> {
                         ),
                       ),
                       const SizedBox(height: 24),
-                      Text(
+                      const Text(
                         'اگر قبلاً فایل سؤالات را در سامانه بارگذاری کرده‌اید،\nاین گزینه را انتخاب کنید تا همان فایل استفاده شود.',
                         textAlign: TextAlign.center,
                         style: TextStyle(
@@ -5788,7 +5498,7 @@ class _NextHomeworkContentState extends State<_NextHomeworkContent> {
                               ),
                             ),
                             const SizedBox(height: 20),
-                            Text(
+                            const Text(
                               'بعد از اسکن، وارد یک صفحه اختصاصی می‌شوید که در آن\nمی‌توانید تکالیف دانش‌آموزان را به‌طور کامل وارد کنید؛\nاز توضیح درس گرفته تا فایل، تصویر یا حتی نکات تکمیلی که\nلازم است در اختیار دانش‌آموز قرار بگیرد.',
                               textAlign: TextAlign.start,
                               style: TextStyle(
@@ -5825,9 +5535,9 @@ class _NextHomeworkContentState extends State<_NextHomeworkContent> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Header - Title on right, Designer on left
-            Row(
+            const Row(
               children: [
-                const Expanded(
+                Expanded(
                   child: Text(
                     'تکلیف کلاسی',
                     style: TextStyle(
@@ -5840,7 +5550,7 @@ class _NextHomeworkContentState extends State<_NextHomeworkContent> {
                 Text(
                   'طراحی شده توسط دانیو',
                   style: TextStyle(
-                    color: const Color(0xFF7CB342),
+                    color: Color(0xFF7CB342),
                     fontSize: 13,
                   ),
                 ),
@@ -6305,7 +6015,8 @@ class _LessonSessionCard extends StatelessWidget {
 
 // Video player placeholder - used directly
 class _VideoPlayerPlaceholder extends StatelessWidget {
-  const _VideoPlayerPlaceholder();
+  final String? thumbnailPath;
+  const _VideoPlayerPlaceholder({this.thumbnailPath});
 
   @override
   Widget build(BuildContext context) {
@@ -6316,40 +6027,47 @@ class _VideoPlayerPlaceholder extends StatelessWidget {
       ),
       child: Stack(
         children: [
-          // Video placeholder background
+          // Video background (thumbnail or placeholder)
           Positioned.fill(
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16),
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    Colors.grey.shade900.withOpacity(0.5),
-                    Colors.black.withOpacity(0.8),
-                  ],
-                ),
-              ),
-              child: Center(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(
-                      Icons.videocam_off_outlined,
-                      color: Colors.grey.shade600,
-                      size: 60,
-                    ),
-                    const SizedBox(height: 12),
-                    Text(
-                      'ویدیو موجود نیست',
-                      style: TextStyle(
-                        color: Colors.grey.shade500,
-                        fontSize: 14,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(16),
+              child: thumbnailPath != null
+                  ? Image.asset(
+                      thumbnailPath!,
+                      fit: BoxFit.cover,
+                    )
+                  : Container(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [
+                            Colors.grey.shade900.withOpacity(0.5),
+                            Colors.black.withOpacity(0.8),
+                          ],
+                        ),
+                      ),
+                      child: Center(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              Icons.videocam_off_outlined,
+                              color: Colors.grey.shade600,
+                              size: 60,
+                            ),
+                            const SizedBox(height: 12),
+                            Text(
+                              'ویدیو موجود نیست',
+                              style: TextStyle(
+                                color: Colors.grey.shade500,
+                                fontSize: 14,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ],
-                ),
-              ),
             ),
           ),
           // Play button
@@ -6369,13 +6087,13 @@ class _VideoPlayerPlaceholder extends StatelessWidget {
             ),
           ),
           // Video controls (top-left in the video)
-          PositionedDirectional(
+          const PositionedDirectional(
             top: 16,
             start: 16,
             child: Row(
               children: [
                 _VideoControlButton(icon: Icons.fullscreen_rounded),
-                const SizedBox(width: 8),
+                SizedBox(width: 8),
                 _VideoControlButton(icon: AppIcons.settings),
               ],
             ),
@@ -6852,10 +6570,21 @@ class _TOCItem extends StatelessWidget {
 // Student avatar placeholder
 class _StudentAvatar extends StatelessWidget {
   final double size;
-  const _StudentAvatar({this.size = 100});
+  final String? imagePath;
+
+  const _StudentAvatar({this.size = 100, this.imagePath});
 
   @override
   Widget build(BuildContext context) {
+    if (imagePath != null) {
+      return Image.asset(
+        imagePath!,
+        width: size,
+        height: size,
+        fit: BoxFit.cover,
+      );
+    }
+
     return Container(
       width: size,
       height: size * 1.3,
@@ -7474,7 +7203,7 @@ class _AttendanceSuccessScreen extends StatelessWidget {
 // LESSON SUMMARY SCREEN - Shows after completing lesson plan
 // ============================================================================
 
-class _LessonSummaryScreen extends StatelessWidget {
+class _LessonSummaryScreen extends StatefulWidget {
   final VoidCallback onGoToExam;
   final VoidCallback onBack;
   final bool isGuest;
@@ -7485,31 +7214,73 @@ class _LessonSummaryScreen extends StatelessWidget {
     required this.isGuest,
   });
 
-  // Topics data
-  static const _topics = [
-    {
-      'title': 'مدل کوانتومی و ترازهای انرژی',
-      'completed': 2,
-      'total': 3,
-      'items': [
-        {'text': 'چرا مدل‌های قدیمی کافی نبودند؟', 'done': true},
-        {'text': 'ترازهای انرژی؛ خانه‌های اصلی الکترون‌ها', 'done': true},
-        {'text': 'زیرلایه‌ها (s, p, d, f)', 'done': false},
-      ],
-    },
-    {
-      'title': 'آرایش الکترونی؛ شناسنامهٔ هر عنصر',
-      'completed': 0,
-      'total': 3,
-      'items': [
-        {'text': 'آرایش الکترونی یعنی چه؟', 'done': true},
-        {'text': 'الکترون‌های ظرفیت؛ کلید رفتار شیمیایی', 'done': false},
-      ],
-    },
-  ];
+  @override
+  State<_LessonSummaryScreen> createState() => _LessonSummaryScreenState();
+}
+
+class _LessonSummaryScreenState extends State<_LessonSummaryScreen> {
+  // Topics data moved to state for interactivity
+  late List<Map<String, dynamic>> _topics;
+
+  @override
+  void initState() {
+    super.initState();
+    _topics = [
+      {
+        'title': 'مدل کوانتومی و ترازهای انرژی',
+        'items': [
+          {'text': 'چرا مدل‌های قدیمی کافی نبودند؟', 'done': true},
+          {'text': 'ترازهای انرژی؛ خانه‌های اصلی الکترون‌ها', 'done': true},
+          {'text': 'زیرلایه‌ها (s, p, d, f)', 'done': false},
+        ],
+      },
+      {
+        'title': 'آرایش الکترونی؛ شناسنامهٔ هر عنصر',
+        'items': [
+          {'text': 'آرایش الکترونی یعنی چه؟', 'done': true},
+          {'text': 'الکترون‌های ظرفیت؛ کلید رفتار شیمیایی', 'done': false},
+        ],
+      },
+    ];
+  }
+
+  double get _overallPercentage {
+    int totalItems = 0;
+    int completedItems = 0;
+    for (var topic in _topics) {
+      final items = topic['items'] as List;
+      totalItems += items.length;
+      completedItems += items.where((i) => i['done'] as bool).length;
+    }
+    return totalItems == 0 ? 0 : completedItems / totalItems;
+  }
+
+  String _toPersianDigit(String input) {
+    const englishDigits = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+    const persianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+    String result = input;
+    for (int i = 0; i < englishDigits.length; i++) {
+      result = result.replaceAll(englishDigits[i], persianDigits[i]);
+    }
+    return result;
+  }
+
+  void _toggleItem(int topicIndex, int itemIndex) {
+    setState(() {
+      final topic = _topics[topicIndex];
+      final items = List<Map<String, dynamic>>.from(topic['items'] as List);
+      final item = Map<String, dynamic>.from(items[itemIndex]);
+      item['done'] = !(item['done'] as bool);
+      items[itemIndex] = item;
+      topic['items'] = items;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    final percentage = _overallPercentage;
+    final percentageInt = (percentage * 100).toInt();
+
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
@@ -7520,56 +7291,62 @@ class _LessonSummaryScreen extends StatelessWidget {
               // Main content - pushes left when sidebar expands
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.fromLTRB(40, 32, 24, 40),
+                  padding: const EdgeInsets.all(40),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Header
+                      // Header with back button and progress
                       Row(
                         children: [
-                          _BackButton(onPressed: onBack),
-                          const Spacer(),
-                          // Previous section button
-                          Padding(
-                            padding: const EdgeInsets.only(left: 12),
-                            child: FocusableItem(
-                              onSelect: onBack,
-                              builder: (isFocused) => AnimatedContainer(
-                                duration: const Duration(milliseconds: 180),
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 20, vertical: 12),
-                                decoration: BoxDecoration(
-                                  color: AppColors.cardBackground,
-                                  borderRadius: BorderRadius.circular(16),
-                                  border: Border.all(
-                                    color: isFocused
-                                        ? AppColors.primary
-                                        : AppColors.cardBorder,
-                                    width: isFocused ? 2 : 1,
-                                  ),
+                          FocusableItem(
+                            onSelect: widget.onBack,
+                            builder: (isFocused) => Container(
+                              padding: const EdgeInsets.all(12),
+                              decoration: BoxDecoration(
+                                color: isFocused
+                                    ? AppColors.primary.withOpacity(0.1)
+                                    : AppColors.cardBackground,
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  color: isFocused
+                                      ? AppColors.primary
+                                      : AppColors.cardBorder,
                                 ),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Icon(Icons.play_arrow_rounded,
-                                        size: 20,
-                                        color: isFocused
-                                            ? Colors.white
-                                            : AppColors.textSecondary),
-                                    const SizedBox(width: 6),
-                                    Text('بخش قبل',
-                                        style: TextStyle(
-                                            color: isFocused
-                                                ? Colors.white
-                                                : AppColors.textSecondary,
-                                            fontSize: 16)),
-                                  ],
-                                ),
+                              ),
+                              child: Icon(
+                                Icons.arrow_back_rounded,
+                                color: isFocused
+                                    ? AppColors.primary
+                                    : Colors.white,
+                                size: 24,
                               ),
                             ),
                           ),
-                          // Next section button
+                          const SizedBox(width: 24),
+                          const Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'خسته نباشید!',
+                                style: TextStyle(
+                                  color: AppColors.textSecondary,
+                                  fontSize: 16,
+                                ),
+                              ),
+                              Text(
+                                'درس امروز با موفقیت تمام شد',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const Spacer(),
+                          // Next step button
                           FocusableItem(
-                            onSelect: onGoToExam,
+                            onSelect: widget.onGoToExam,
                             builder: (isFocused) => AnimatedContainer(
                               duration: const Duration(milliseconds: 180),
                               padding: const EdgeInsets.symmetric(
@@ -7599,7 +7376,7 @@ class _LessonSummaryScreen extends StatelessWidget {
                           ),
                         ],
                       ),
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 32),
                       // Tabs
                       SizedBox(
                         height: 50,
@@ -7620,99 +7397,68 @@ class _LessonSummaryScreen extends StatelessWidget {
                           ],
                         ),
                       ),
-                      const SizedBox(height: 24),
-                      // Main content area
+                      const SizedBox(height: 32),
+                      // Main Stats Row
                       Expanded(
                         child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
-                            // Go to exam button
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                FocusableItem(
-                                  onSelect: onGoToExam,
-                                  builder: (isFocused) => AnimatedContainer(
-                                    duration: const Duration(milliseconds: 180),
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 24, vertical: 14),
-                                    decoration: BoxDecoration(
-                                      color: AppColors.primary,
-                                      borderRadius: BorderRadius.circular(16),
-                                      border: Border.all(
-                                        color: isFocused
-                                            ? Colors.white
-                                            : Colors.transparent,
-                                        width: 2,
-                                      ),
-                                    ),
-                                    child: const Text(
-                                      'رفتن به بخش امتحان کلاسی',
-                                      style: TextStyle(
-                                          color: Colors.white, fontSize: 15),
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(height: 24),
-                                // Donut chart card
-                                Container(
-                                  width: 340,
-                                  padding: const EdgeInsets.all(32),
-                                  decoration: BoxDecoration(
-                                    color: AppColors.cardBackground,
-                                    borderRadius: BorderRadius.circular(20),
-                                    border: Border.all(
-                                        color: AppColors.cardBorder
-                                            .withOpacity(0.3)),
-                                  ),
-                                  child: Column(
-                                    children: [
-                                      // Donut chart
-                                      SizedBox(
-                                        width: 200,
-                                        height: 200,
-                                        child: CustomPaint(
-                                          painter: _LessonDonutPainter(
-                                              percentage: 0.45),
-                                          child: const Center(
-                                            child: Column(
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                Text(
-                                                  '۴۵',
-                                                  style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 48,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
-                                                Text(
-                                                  'درصد',
-                                                  style: TextStyle(
-                                                    color:
-                                                        AppColors.textSecondary,
-                                                    fontSize: 16,
-                                                  ),
-                                                ),
-                                              ],
+                            // Progress Circle (Right in RTL layout)
+                            Container(
+                              width: 380,
+                              padding: const EdgeInsets.all(32),
+                              decoration: BoxDecoration(
+                                color:
+                                    AppColors.cardBackground.withOpacity(0.5),
+                                borderRadius: BorderRadius.circular(24),
+                                border: Border.all(
+                                    color: Colors.white12.withOpacity(0.05)),
+                              ),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  SizedBox(
+                                    width: 200,
+                                    height: 200,
+                                    child: CustomPaint(
+                                      painter: _LessonDonutPainter(
+                                          percentage: percentage),
+                                      child: Center(
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Text(
+                                              _toPersianDigit('$percentageInt'),
+                                              style: const TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 48,
+                                                fontWeight: FontWeight.bold,
+                                              ),
                                             ),
-                                          ),
+                                            const Text(
+                                              'درصد',
+                                              style: TextStyle(
+                                                color: AppColors.textSecondary,
+                                                fontSize: 16,
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ),
-                                      const SizedBox(height: 24),
-                                      const Text(
-                                        'مقدار مطالبی که در این جلسه باید تدریس داده می‌شد.',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          color: AppColors.textSecondary,
-                                          fontSize: 14,
-                                          height: 1.6,
-                                        ),
-                                      ),
-                                    ],
+                                    ),
                                   ),
-                                ),
-                              ],
+                                  const SizedBox(height: 24),
+                                  const Text(
+                                    'مقدار مطالبی که در این جلسه باید تدریس داده می‌شد.',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      color: AppColors.textSecondary,
+                                      fontSize: 14,
+                                      height: 1.6,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                             const SizedBox(width: 24),
                             // Topics list
@@ -7734,14 +7480,23 @@ class _LessonSummaryScreen extends StatelessWidget {
                                       itemCount: _topics.length,
                                       separatorBuilder: (_, __) =>
                                           const SizedBox(height: 16),
-                                      itemBuilder: (context, index) {
-                                        final topic = _topics[index];
+                                      itemBuilder: (context, topicIndex) {
+                                        final topic = _topics[topicIndex];
+                                        final items = (topic['items'] as List)
+                                            .cast<Map<String, dynamic>>();
+                                        final completed = items
+                                            .where((i) => i['done'] as bool)
+                                            .length;
                                         return _TopicCard(
                                           title: topic['title'] as String,
-                                          completed: topic['completed'] as int,
-                                          total: topic['total'] as int,
-                                          items: (topic['items'] as List)
-                                              .cast<Map<String, dynamic>>(),
+                                          completedText:
+                                              _toPersianDigit('$completed'),
+                                          totalText: _toPersianDigit(
+                                              '${items.length}'),
+                                          items: items,
+                                          onToggleItem: (itemIndex) =>
+                                              _toggleItem(
+                                                  topicIndex, itemIndex),
                                         );
                                       },
                                     ),
@@ -7760,7 +7515,7 @@ class _LessonSummaryScreen extends StatelessWidget {
               _Sidebar(
                 expanded: false,
                 selectedIndex: 3,
-                isGuest: isGuest,
+                isGuest: widget.isGuest,
                 onHover: (_) {},
                 onSelect: (_) {},
                 onLogout: () {},
@@ -7798,15 +7553,17 @@ class _LessonSummaryScreen extends StatelessWidget {
 // Topic card for lesson summary
 class _TopicCard extends StatelessWidget {
   final String title;
-  final int completed;
-  final int total;
+  final String completedText;
+  final String totalText;
   final List<Map<String, dynamic>> items;
+  final Function(int) onToggleItem;
 
   const _TopicCard({
     required this.title,
-    required this.completed,
-    required this.total,
+    required this.completedText,
+    required this.totalText,
     required this.items,
+    required this.onToggleItem,
   });
 
   @override
@@ -7833,7 +7590,7 @@ class _TopicCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Text(
-                  '$completed از $total',
+                  '$completedText از $totalText',
                   style: const TextStyle(
                     color: AppColors.textSecondary,
                     fontSize: 13,
@@ -7854,10 +7611,15 @@ class _TopicCard extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           // Items list
-          ...items.map((item) => _TopicItem(
-                text: item['text'] as String,
-                isDone: item['done'] as bool,
-              )),
+          ...items.asMap().entries.map((entry) {
+            final index = entry.key;
+            final item = entry.value;
+            return _TopicItem(
+              text: item['text'] as String,
+              isDone: item['done'] as bool,
+              onTap: () => onToggleItem(index),
+            );
+          }),
         ],
       ),
     );
@@ -7868,41 +7630,57 @@ class _TopicCard extends StatelessWidget {
 class _TopicItem extends StatelessWidget {
   final String text;
   final bool isDone;
+  final VoidCallback onTap;
 
-  const _TopicItem({required this.text, required this.isDone});
+  const _TopicItem({
+    required this.text,
+    required this.isDone,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
-      child: Row(
-        children: [
-          // Checkbox
-          Container(
-            width: 24,
-            height: 24,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: isDone ? AppColors.primary : Colors.transparent,
-              border: Border.all(
-                color: isDone ? AppColors.primary : AppColors.cardBorder,
-                width: 2,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(12),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 4),
+          child: Row(
+            children: [
+              // Checkbox - Starts on Right in RTL
+              Container(
+                width: 24,
+                height: 24,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: isDone ? AppColors.primary : Colors.transparent,
+                  border: Border.all(
+                    color: isDone ? AppColors.primary : AppColors.cardBorder,
+                    width: 2,
+                  ),
+                ),
+                child: isDone
+                    ? const Icon(Icons.check_rounded,
+                        color: Colors.white, size: 16)
+                    : null,
               ),
-            ),
-            child: isDone
-                ? const Icon(Icons.check_rounded, color: Colors.white, size: 16)
-                : null,
+              const SizedBox(width: 16),
+              // Text - Moves to Left in RTL
+              Expanded(
+                child: Text(
+                  text,
+                  style: TextStyle(
+                    color: isDone ? Colors.white : AppColors.textSecondary,
+                    fontSize: 14,
+                    decoration: isDone ? TextDecoration.lineThrough : null,
+                  ),
+                ),
+              ),
+            ],
           ),
-          const Spacer(),
-          // Text
-          Text(
-            text,
-            style: TextStyle(
-              color: isDone ? Colors.white : AppColors.textSecondary,
-              fontSize: 14,
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
@@ -7950,4 +7728,168 @@ class _LessonDonutPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+}
+
+// ============================================================================
+// OVERVIEW DIALOG (New Interactive Feature)
+// ============================================================================
+
+class _OverviewDialog extends StatefulWidget {
+  const _OverviewDialog();
+
+  @override
+  State<_OverviewDialog> createState() => _OverviewDialogState();
+}
+
+class _OverviewDialogState extends State<_OverviewDialog> {
+  final List<Map<String, dynamic>> _items = [
+    {'text': 'مفهوم ترازهای انرژی را کاملاً متوجه شدم', 'checked': false},
+    {'text': 'تفاوت مدل بور و کوانتومی را درک کردم', 'checked': false},
+    {'text': 'با اعداد کوانتومی (n, l, ml, ms) آشنا شدم', 'checked': false},
+    {'text': 'آزمایش سوختن آهن را مشاهده و تحلیل کردم', 'checked': false},
+  ];
+
+  double get _progress {
+    final checkedCount = _items.where((i) => i['checked'] as bool).length;
+    if (_items.isEmpty) return 0;
+    return checkedCount / _items.length;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      backgroundColor: Colors.transparent,
+      child: Container(
+        width: 500,
+        padding: const EdgeInsets.all(32),
+        decoration: BoxDecoration(
+          color: AppColors.cardBackground,
+          borderRadius: BorderRadius.circular(24),
+          border: Border.all(color: AppColors.cardBorder),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.5),
+              blurRadius: 30,
+              spreadRadius: 10,
+            ),
+          ],
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'مرور و جمع‌بندی',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 8),
+            const Text(
+              'برای تکمیل این بخش، موارد زیر را بررسی کنید:',
+              style: TextStyle(color: AppColors.textSecondary, fontSize: 16),
+            ),
+            const SizedBox(height: 24),
+            // Progress Bar
+            LinearProgressIndicator(
+              value: _progress,
+              backgroundColor: AppColors.cardBorder,
+              color: AppColors.primary,
+              minHeight: 8,
+              borderRadius: BorderRadius.circular(4),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              '${(_progress * 100).toInt()}٪ تکمیل شده',
+              style: const TextStyle(
+                  color: AppColors.primary, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 24),
+            // Checklist
+            Column(
+              children: _items.map((item) {
+                final isChecked = item['checked'] as bool;
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 12),
+                  child: Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      onTap: () => setState(() => item['checked'] = !isChecked),
+                      borderRadius: BorderRadius.circular(12),
+                      child: Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: isChecked
+                              ? AppColors.primary.withOpacity(0.1)
+                              : Colors.transparent,
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: isChecked
+                                ? AppColors.primary
+                                : AppColors.cardBorder,
+                          ),
+                        ),
+                        child: Row(
+                          children: [
+                            Container(
+                              width: 24,
+                              height: 24,
+                              decoration: BoxDecoration(
+                                color: isChecked
+                                    ? AppColors.primary
+                                    : Colors.transparent,
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  color: isChecked
+                                      ? AppColors.primary
+                                      : AppColors.textSecondary,
+                                  width: 2,
+                                ),
+                              ),
+                              child: isChecked
+                                  ? const Icon(Icons.check,
+                                      size: 16, color: Colors.white)
+                                  : null,
+                            ),
+                            const SizedBox(width: 16),
+                            Expanded(
+                              child: Text(
+                                item['text'] as String,
+                                style: TextStyle(
+                                  color: isChecked
+                                      ? Colors.white
+                                      : AppColors.textPrimary,
+                                  fontSize: 16,
+                                  decoration: isChecked
+                                      ? TextDecoration.lineThrough
+                                      : null,
+                                  decorationColor: AppColors.textSecondary,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              }).toList(),
+            ),
+            const SizedBox(height: 24),
+            SizedBox(
+              width: double.infinity,
+              child: PrimaryButton(
+                text: 'ادامه و شروع بخش بعدی',
+                onPressed: _progress == 1.0
+                    ? () => Navigator.of(context).pop()
+                    : () {},
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }
