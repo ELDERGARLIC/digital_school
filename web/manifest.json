@@ -1,13 +1,16 @@
 {
-    "name": "iran_digital_school",
-    "short_name": "iran_digital_school",
+    "name": "مدرسه دیجیتال ایران",
+    "short_name": "مدرسه دیجیتال",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
-    "orientation": "portrait-primary",
+    "background_color": "#1A1A1A",
+    "theme_color": "#2196F3",
+    "description": "پلتفرم آموزش دیجیتال ایران - یادگیری آنلاین برای همه",
+    "orientation": "landscape-primary",
     "prefer_related_applications": false,
+    "lang": "fa",
+    "dir": "rtl",
+    "categories": ["education", "productivity"],
     "icons": [
         {
             "src": "icons/Icon-192.png",
