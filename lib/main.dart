@@ -1,7 +1,64 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shamsi_date/shamsi_date.dart';
 import 'dart:math' as math;
+
+class AppIcons {
+  static const home = 'Home.svg';
+  static const school = 'Class.svg';
+  static const videoClass = 'video class.svg';
+  static const video = 'Video.svg';
+  static const profile = 'profile.svg';
+  static const people = 'people.svg';
+  static const settings = 'setting.svg';
+  static const logout = 'log out.svg';
+  static const calendar = 'calender.svg';
+  static const clock = 'clock.svg';
+  static const clock3d = 'clock 3d.svg';
+  static const back = 'back.svg';
+  static const rightArrow = 'left arrow.svg';
+  static const leftArrow = 'right arrow.svg';
+  static const play = 'Start play.svg';
+  static const startClass = 'Start Class.svg';
+  static const check = 'tick circle.svg';
+  static const done3d = 'done 3d.svg';
+  static const quiz = 'quiz.svg';
+  static const experiment = 'ازمایش.svg';
+  static const assistant = 'دستیار.svg';
+  static const files = 'files.svg';
+  static const headline = 'سرفصل.svg';
+  static const plus = 'Plus.svg';
+  static const tickCircle = 'tick circle.svg';
+  static const absent = 'غایب.svg';
+  static const present = 'حاضر.svg';
+  static const late = 'تاخیر.svg';
+  static const faceId = 'face id.svg';
+  static const mobile = 'mobile.svg';
+  static const voice = 'voice.svg';
+  static const sessionAttendance = 'حضور جلسه.svg';
+  static const sessionAbsence = 'غیبت جلسه.svg';
+  static const sessionDelay = 'تاخیر جلسه.svg';
+}
+
+class AppIcon extends StatelessWidget {
+  final String path;
+  final double size;
+  final Color? color;
+
+  const AppIcon(this.path, {super.key, this.size = 24, this.color});
+
+  @override
+  Widget build(BuildContext context) {
+    return SvgPicture.asset(
+      'assets/icons/$path',
+      width: size,
+      height: size,
+      colorFilter:
+          color != null ? ColorFilter.mode(color!, BlendMode.srcIn) : null,
+    );
+  }
+}
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -233,7 +290,7 @@ class PrimaryButton extends StatelessWidget {
   final VoidCallback? onPressed;
   final bool autofocus;
   final double? width;
-  final IconData? icon;
+  final String? iconPath;
 
   const PrimaryButton({
     super.key,
@@ -241,7 +298,7 @@ class PrimaryButton extends StatelessWidget {
     this.onPressed,
     this.autofocus = false,
     this.width,
-    this.icon,
+    this.iconPath,
   });
 
   @override
@@ -285,9 +342,9 @@ class PrimaryButton extends StatelessWidget {
                     color: Colors.white,
                     fontSize: 16,
                     fontWeight: FontWeight.w600)),
-            if (icon != null) ...[
+            if (iconPath != null) ...[
               const SizedBox(width: 8),
-              Icon(icon, color: Colors.white, size: 20),
+              AppIcon(iconPath!, color: Colors.white, size: 20),
             ],
           ],
         ),
@@ -598,9 +655,13 @@ class _AddProfileButton extends StatelessWidget {
             ),
             transform: Matrix4.identity()..scale(isFocused ? 1.06 : 1.0),
             transformAlignment: Alignment.center,
-            child: Icon(Icons.add,
-                size: 60,
-                color: isFocused ? AppColors.primary : AppColors.textSecondary),
+            child: Padding(
+              padding: const EdgeInsets.all(40.0),
+              child: AppIcon(AppIcons.plus,
+                  size: 60,
+                  color:
+                      isFocused ? AppColors.primary : AppColors.textSecondary),
+            ),
           ),
           const SizedBox(height: 16),
           AnimatedDefaultTextStyle(
@@ -654,11 +715,14 @@ class _GuestProfileButton extends StatelessWidget {
             ),
             transform: Matrix4.identity()..scale(isFocused ? 1.06 : 1.0),
             transformAlignment: Alignment.center,
-            child: Icon(Icons.person_outline_rounded,
-                size: 60,
-                color: isFocused
-                    ? AppColors.primary
-                    : AppColors.textSecondary.withOpacity(0.7)),
+            child: Padding(
+              padding: const EdgeInsets.all(40.0),
+              child: AppIcon(AppIcons.profile,
+                  size: 60,
+                  color: isFocused
+                      ? AppColors.primary
+                      : AppColors.textSecondary.withOpacity(0.7)),
+            ),
           ),
           const SizedBox(height: 16),
           AnimatedDefaultTextStyle(
@@ -909,7 +973,7 @@ class _PhoneLoginContentState extends State<PhoneLoginContent> {
                     ),
                   ),
                   const SizedBox(width: 12),
-                  const Icon(Icons.phone_android,
+                  const AppIcon(AppIcons.mobile,
                       color: AppColors.textSecondary),
                 ],
               ),
@@ -1431,7 +1495,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 const SizedBox(height: 24),
                                 PrimaryButton(
                                     text: 'شروع کلاس',
-                                    icon: Icons.play_arrow_rounded,
+                                    iconPath: AppIcons.startClass,
                                     onPressed: () {}),
                               ],
                             ),
@@ -1498,16 +1562,16 @@ class _Sidebar extends StatelessWidget {
 
   List<Map<String, dynamic>> get _navItems {
     final items = [
-      {'icon': Icons.home_filled, 'label': 'صفحه اصلی'},
-      {'icon': Icons.search_rounded, 'label': 'جستجو'},
-      {'icon': Icons.play_circle_filled_rounded, 'label': 'شروع کلاس'},
-      {'icon': Icons.grid_view_rounded, 'label': 'کلاس‌ها'},
-      {'icon': Icons.play_circle_outline_rounded, 'label': 'ویدیوهای آموزشی'},
-      {'icon': Icons.settings_rounded, 'label': 'تنظیمات'},
+      {'icon': AppIcons.home, 'label': 'صفحه اصلی'},
+      {'icon': Icons.search_rounded, 'label': 'جستجو'}, // No SVG match found
+      {'icon': AppIcons.startClass, 'label': 'شروع کلاس'},
+      {'icon': AppIcons.school, 'label': 'کلاس‌ها'},
+      {'icon': AppIcons.video, 'label': 'ویدیوهای آموزشی'},
+      {'icon': AppIcons.settings, 'label': 'تنظیمات'},
     ];
     // Only add profile for non-guest users
     if (!isGuest) {
-      items.add({'icon': Icons.person_outline_rounded, 'label': 'پروفایل'});
+      items.add({'icon': AppIcons.profile, 'label': 'پروفایل'});
     }
     return items;
   }
@@ -1570,7 +1634,7 @@ class _Sidebar extends StatelessWidget {
                     itemBuilder: (context, index) {
                       final item = navItems[index];
                       return _SidebarItem(
-                        icon: item['icon'] as IconData,
+                        icon: item['icon'],
                         label: item['label'] as String,
                         isSelected: selectedIndex == index,
                         expanded: expanded,
@@ -1586,7 +1650,7 @@ class _Sidebar extends StatelessWidget {
                       left: expanded ? 14 : 8,
                       right: expanded ? 14 : 8),
                   child: _SidebarItem(
-                      icon: Icons.logout_rounded,
+                      icon: AppIcons.logout,
                       label: 'خروج',
                       isSelected: false,
                       expanded: expanded,
@@ -1644,7 +1708,7 @@ class _Sidebar extends StatelessWidget {
 }
 
 class _SidebarItem extends StatelessWidget {
-  final IconData icon;
+  final dynamic icon;
   final String label;
   final bool isSelected;
   final bool expanded;
@@ -1693,7 +1757,10 @@ class _SidebarItem extends StatelessWidget {
           child: expanded
               ? Row(
                   children: [
-                    Icon(icon, size: 26, color: iconColor),
+                    if (icon is String)
+                      AppIcon(icon, size: 26, color: iconColor)
+                    else
+                      Icon(icon as IconData, size: 26, color: iconColor),
                     const SizedBox(width: 16),
                     Expanded(
                       child: Text(
@@ -1716,7 +1783,10 @@ class _SidebarItem extends StatelessWidget {
                     ),
                   ],
                 )
-              : Center(child: Icon(icon, size: 26, color: iconColor)),
+              : Center(
+                  child: icon is String
+                      ? AppIcon(icon, size: 26, color: iconColor)
+                      : Icon(icon as IconData, size: 26, color: iconColor)),
         );
       },
     );
@@ -1822,10 +1892,10 @@ class _PersianCalendarState extends State<PersianCalendar> {
           children: [
             // Nav buttons - rounded squares (right side in RTL)
             _CalendarNavButton(
-                icon: Icons.chevron_left_rounded, onPressed: _previousMonth),
+                iconPath: AppIcons.leftArrow, onPressed: _previousMonth),
             const SizedBox(width: 10),
             _CalendarNavButton(
-                icon: Icons.chevron_right_rounded, onPressed: _nextMonth),
+                iconPath: AppIcons.rightArrow, onPressed: _nextMonth),
             // Spacer to push title to center
             const Expanded(child: SizedBox()),
             // Month title - centered
@@ -1861,8 +1931,7 @@ class _PersianCalendarState extends State<PersianCalendar> {
                 child: const Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(Icons.calendar_today_rounded,
-                        size: 20, color: Colors.white),
+                    AppIcon(AppIcons.calendar, size: 20, color: Colors.white),
                     SizedBox(width: 10),
                     Text('برنامه امروز',
                         style: TextStyle(
@@ -1938,9 +2007,9 @@ class _PersianCalendarState extends State<PersianCalendar> {
 }
 
 class _CalendarNavButton extends StatelessWidget {
-  final IconData icon;
+  final String iconPath;
   final VoidCallback onPressed;
-  const _CalendarNavButton({required this.icon, required this.onPressed});
+  const _CalendarNavButton({required this.iconPath, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -1964,8 +2033,11 @@ class _CalendarNavButton extends StatelessWidget {
                 ]
               : [],
         ),
-        child: Icon(icon,
-            color: isFocused ? AppColors.primary : Colors.white, size: 28),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: AppIcon(iconPath,
+              color: isFocused ? AppColors.primary : Colors.white, size: 28),
+        ),
       ),
     );
   }
@@ -2997,7 +3069,7 @@ class _SingleClassScreenState extends State<SingleClassScreen> {
                                 const SizedBox(height: 32),
                                 PrimaryButton(
                                   text: 'شروع کلاس',
-                                  icon: Icons.play_arrow_rounded,
+                                  iconPath: AppIcons.startClass,
                                   autofocus: true,
                                   onPressed: () {
                                     Navigator.push(
@@ -3386,27 +3458,15 @@ class _ClassActionGrid extends StatelessWidget {
   Widget build(BuildContext context) {
     final actions = [
       {
-        'icon': Icons.assignment_ind_rounded,
+        'icon': AppIcons.sessionAttendance,
         'label': 'حضور و غیاب کلاسی',
         'tabIndex': 0
       },
-      {'icon': Icons.checklist_rounded, 'label': 'بررسی تکالیف', 'tabIndex': 1},
-      {
-        'icon': Icons.description_rounded,
-        'label': 'طرح درس این جلسه',
-        'tabIndex': 2
-      },
-      {'icon': Icons.quiz_rounded, 'label': 'امتحان کلاسی', 'tabIndex': 3},
-      {
-        'icon': Icons.assignment_rounded,
-        'label': 'تکلیف جلسه بعد',
-        'tabIndex': 4
-      },
-      {
-        'icon': Icons.article_rounded,
-        'label': 'طرح درس جلسه بعد',
-        'tabIndex': 5
-      },
+      {'icon': AppIcons.files, 'label': 'بررسی تکالیف', 'tabIndex': 1},
+      {'icon': AppIcons.headline, 'label': 'طرح درس این جلسه', 'tabIndex': 2},
+      {'icon': AppIcons.quiz, 'label': 'امتحان کلاسی', 'tabIndex': 3},
+      {'icon': AppIcons.files, 'label': 'تکلیف جلسه بعد', 'tabIndex': 4},
+      {'icon': AppIcons.headline, 'label': 'طرح درس جلسه بعد', 'tabIndex': 5},
     ];
 
     return SizedBox(
@@ -3426,7 +3486,7 @@ class _ClassActionGrid extends StatelessWidget {
                       bottom: 6,
                     ),
                     child: _ActionCard(
-                      icon: action['icon'] as IconData,
+                      iconPath: action['icon'] as String,
                       label: action['label'] as String,
                       onSelect: () {
                         Navigator.push(
@@ -3457,7 +3517,7 @@ class _ClassActionGrid extends StatelessWidget {
                       top: 6,
                     ),
                     child: _ActionCard(
-                      icon: action['icon'] as IconData,
+                      iconPath: action['icon'] as String,
                       label: action['label'] as String,
                       onSelect: () {
                         Navigator.push(
@@ -3482,12 +3542,12 @@ class _ClassActionGrid extends StatelessWidget {
 }
 
 class _ActionCard extends StatelessWidget {
-  final IconData icon;
+  final String iconPath;
   final String label;
   final VoidCallback onSelect;
 
   const _ActionCard({
-    required this.icon,
+    required this.iconPath,
     required this.label,
     required this.onSelect,
   });
@@ -3521,7 +3581,7 @@ class _ActionCard extends StatelessWidget {
         child: Row(
           children: [
             // Icon on the left
-            _ActionIcon(icon: icon, isFocused: isFocused),
+            _ActionIcon(iconPath: iconPath, isFocused: isFocused),
             const Spacer(),
             // Text on the right
             Text(
@@ -3540,10 +3600,10 @@ class _ActionCard extends StatelessWidget {
 }
 
 class _ActionIcon extends StatelessWidget {
-  final IconData icon;
+  final String iconPath;
   final bool isFocused;
 
-  const _ActionIcon({required this.icon, required this.isFocused});
+  const _ActionIcon({required this.iconPath, required this.isFocused});
 
   @override
   Widget build(BuildContext context) {
@@ -3553,8 +3613,8 @@ class _ActionIcon extends StatelessWidget {
       child: CustomPaint(
         painter: _ActionIconPainter(isFocused: isFocused),
         child: Center(
-          child: Icon(
-            icon,
+          child: AppIcon(
+            iconPath,
             size: 28,
             color:
                 isFocused ? const Color(0xFF6AB4F4) : const Color(0xFF4A9AD8),
@@ -4174,10 +4234,10 @@ class _AttendanceContent extends StatelessWidget {
             Row(
               children: [
                 _NavArrowButton(
-                    icon: Icons.chevron_left_rounded, onPressed: onPrevious),
+                    iconPath: AppIcons.leftArrow, onPressed: onPrevious),
                 const SizedBox(width: 10),
                 _NavArrowButton(
-                    icon: Icons.chevron_right_rounded, onPressed: onNext),
+                    iconPath: AppIcons.rightArrow, onPressed: onNext),
               ],
             ),
             const SizedBox(height: 32),
@@ -4186,7 +4246,7 @@ class _AttendanceContent extends StatelessWidget {
               children: [
                 _AttendanceStatusButton(
                   label: 'حاضر',
-                  icon: Icons.check_rounded,
+                  iconPath: AppIcons.present,
                   isSelected: status == 0,
                   color: Colors.green,
                   onSelect: () => onSetStatus(0),
@@ -4194,7 +4254,7 @@ class _AttendanceContent extends StatelessWidget {
                 const SizedBox(width: 12),
                 _AttendanceStatusButton(
                   label: 'غایب',
-                  icon: Icons.close_rounded,
+                  iconPath: AppIcons.absent,
                   isSelected: status == 1,
                   color: Colors.red,
                   onSelect: () => onSetStatus(1),
@@ -4202,7 +4262,7 @@ class _AttendanceContent extends StatelessWidget {
                 const SizedBox(width: 12),
                 _AttendanceStatusButton(
                   label: 'تاخیر',
-                  icon: Icons.access_time_rounded,
+                  iconPath: AppIcons.late,
                   isSelected: status == 2,
                   color: Colors.grey,
                   onSelect: () => onSetStatus(2),
@@ -4272,12 +4332,12 @@ class _HomeworkReviewContent extends StatelessWidget {
                     Row(
                       children: [
                         _NavArrowButton(
-                          icon: Icons.chevron_left_rounded,
+                          iconPath: AppIcons.leftArrow,
                           onPressed: onPrevious,
                         ),
                         const SizedBox(width: 10),
                         _NavArrowButton(
-                          icon: Icons.chevron_right_rounded,
+                          iconPath: AppIcons.rightArrow,
                           onPressed: onNext,
                         ),
                       ],
@@ -6301,8 +6361,8 @@ class _VideoPlayerPlaceholder extends StatelessWidget {
                 color: Colors.white.withOpacity(0.15),
                 shape: BoxShape.circle,
               ),
-              child: const Icon(
-                Icons.play_arrow_rounded,
+              child: const AppIcon(
+                AppIcons.play,
                 color: Colors.white,
                 size: 50,
               ),
@@ -6316,7 +6376,7 @@ class _VideoPlayerPlaceholder extends StatelessWidget {
               children: [
                 _VideoControlButton(icon: Icons.fullscreen_rounded),
                 const SizedBox(width: 8),
-                _VideoControlButton(icon: Icons.settings_rounded),
+                _VideoControlButton(icon: AppIcons.settings),
               ],
             ),
           ),
@@ -6327,7 +6387,7 @@ class _VideoPlayerPlaceholder extends StatelessWidget {
 }
 
 class _VideoControlButton extends StatelessWidget {
-  final IconData icon;
+  final dynamic icon;
   const _VideoControlButton({required this.icon});
 
   @override
@@ -6339,7 +6399,9 @@ class _VideoControlButton extends StatelessWidget {
         color: Colors.black.withOpacity(0.5),
         borderRadius: BorderRadius.circular(10),
       ),
-      child: Icon(icon, color: Colors.white, size: 22),
+      child: icon is String
+          ? AppIcon(icon, color: Colors.white, size: 22)
+          : Icon(icon as IconData, color: Colors.white, size: 22),
     );
   }
 }
@@ -6660,8 +6722,8 @@ class _TOCChapter extends StatelessWidget {
                     color: AppColors.primary.withOpacity(0.15),
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: const Icon(
-                    Icons.folder_open_rounded,
+                  child: const AppIcon(
+                    AppIcons.headline,
                     color: AppColors.primary,
                     size: 18,
                   ),
@@ -6716,17 +6778,17 @@ class _TOCItem extends StatelessWidget {
     required this.onTap,
   });
 
-  IconData get _icon {
+  String get _iconPath {
     switch (type) {
       case 'video':
-        return Icons.play_circle_outline_rounded;
+        return AppIcons.videoClass;
       case 'experiment':
-        return Icons.science_outlined;
+        return AppIcons.experiment;
       case 'quiz':
-        return Icons.quiz_outlined;
+        return AppIcons.quiz;
       case 'text':
       default:
-        return Icons.article_outlined;
+        return AppIcons.headline;
     }
   }
 
@@ -6760,8 +6822,8 @@ class _TOCItem extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               // Icon (on right in RTL)
-              Icon(
-                _icon,
+              AppIcon(
+                _iconPath,
                 color: isSelected ? Colors.white : AppColors.textSecondary,
                 size: 18,
               ),
@@ -6820,23 +6882,23 @@ class _HistoryIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     Color bgColor;
     Color iconColor;
-    IconData icon;
+    dynamic icon;
 
     switch (status) {
       case 'present':
         bgColor = Colors.green;
         iconColor = Colors.white;
-        icon = Icons.check_rounded;
+        icon = AppIcons.present;
         break;
       case 'absent':
         bgColor = Colors.red;
         iconColor = Colors.white;
-        icon = Icons.close_rounded;
+        icon = AppIcons.absent;
         break;
       case 'late':
         bgColor = Colors.white;
         iconColor = Colors.black54;
-        icon = Icons.access_time_rounded;
+        icon = AppIcons.late;
         break;
       default:
         bgColor = Colors.grey;
@@ -6851,7 +6913,9 @@ class _HistoryIcon extends StatelessWidget {
         color: bgColor,
         borderRadius: BorderRadius.circular(6),
       ),
-      child: Icon(icon, size: 18, color: iconColor),
+      child: icon is String
+          ? AppIcon(icon, size: 18, color: iconColor)
+          : Icon(icon as IconData, size: 18, color: iconColor),
     );
   }
 }
@@ -6919,10 +6983,10 @@ class _LegendItem extends StatelessWidget {
 
 // Navigation arrow button
 class _NavArrowButton extends StatelessWidget {
-  final IconData icon;
+  final String iconPath;
   final VoidCallback onPressed;
 
-  const _NavArrowButton({required this.icon, required this.onPressed});
+  const _NavArrowButton({required this.iconPath, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -6939,9 +7003,10 @@ class _NavArrowButton extends StatelessWidget {
               color: isFocused ? AppColors.primary : AppColors.cardBorder,
               width: isFocused ? 2 : 1),
         ),
-        child: Icon(icon,
-            color: isFocused ? Colors.white : AppColors.textSecondary,
-            size: 28),
+        child: Center(
+            child: AppIcon(iconPath,
+                color: isFocused ? Colors.white : AppColors.textSecondary,
+                size: 28)),
       ),
     );
   }
@@ -6950,14 +7015,14 @@ class _NavArrowButton extends StatelessWidget {
 // Attendance status selection button
 class _AttendanceStatusButton extends StatelessWidget {
   final String label;
-  final IconData icon;
+  final String iconPath;
   final bool isSelected;
   final Color color;
   final VoidCallback onSelect;
 
   const _AttendanceStatusButton({
     required this.label,
-    required this.icon,
+    required this.iconPath,
     required this.isSelected,
     required this.color,
     required this.onSelect,
@@ -7014,7 +7079,7 @@ class _AttendanceStatusButton extends StatelessWidget {
                           color: showColor ? color : Colors.grey,
                           borderRadius: BorderRadius.circular(6),
                         ),
-                        child: Icon(icon, size: 14, color: Colors.white),
+                        child: AppIcon(iconPath, size: 14, color: Colors.white),
                       ),
                     ),
                   ],
