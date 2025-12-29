@@ -1498,7 +1498,7 @@ class _HomeScreenState extends State<HomeScreen> {
       if (widget.isGuest) {
         _showGuestLoginDialog();
       } else {
-        _showPresidentialMessage();
+        // _showPresidentialMessage();
       }
     });
   }
@@ -1511,13 +1511,13 @@ class _HomeScreenState extends State<HomeScreen> {
         builder: (_) => const GuestLoginDialog());
   }
 
-  void _showPresidentialMessage() {
-    showDialog(
-        context: context,
-        barrierDismissible: true,
-        barrierColor: Colors.black54,
-        builder: (_) => const PresidentialMessageDialog());
-  }
+  // void _showPresidentialMessage() {
+  //   showDialog(
+  //       context: context,
+  //       barrierDismissible: true,
+  //       barrierColor: Colors.black54,
+  //       builder: (_) => const PresidentialMessageDialog());
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -2621,159 +2621,159 @@ class GuestLoginDialog extends StatelessWidget {
   }
 }
 
-class PresidentialMessageDialog extends StatefulWidget {
-  const PresidentialMessageDialog({super.key});
-  @override
-  State<PresidentialMessageDialog> createState() =>
-      _PresidentialMessageDialogState();
-}
+// class PresidentialMessageDialog extends StatefulWidget {
+//   const PresidentialMessageDialog({super.key});
+//   @override
+//   State<PresidentialMessageDialog> createState() =>
+//       _PresidentialMessageDialogState();
+// }
 
-class _PresidentialMessageDialogState extends State<PresidentialMessageDialog>
-    with TickerProviderStateMixin {
-  late List<_ConfettiParticle> _particles;
-  late AnimationController _confettiController;
+// class _PresidentialMessageDialogState extends State<PresidentialMessageDialog>
+//     with TickerProviderStateMixin {
+//   late List<_ConfettiParticle> _particles;
+//   late AnimationController _confettiController;
 
-  @override
-  void initState() {
-    super.initState();
-    _particles = List.generate(100, (_) => _ConfettiParticle());
-    _confettiController =
-        AnimationController(vsync: this, duration: const Duration(seconds: 6))
-          ..repeat();
-  }
+//   @override
+//   void initState() {
+//     super.initState();
+//     _particles = List.generate(100, (_) => _ConfettiParticle());
+//     _confettiController =
+//         AnimationController(vsync: this, duration: const Duration(seconds: 6))
+//           ..repeat();
+//   }
 
-  @override
-  void dispose() {
-    _confettiController.dispose();
-    super.dispose();
-  }
+//   @override
+//   void dispose() {
+//     _confettiController.dispose();
+//     super.dispose();
+//   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Stack(
-        children: [
-          AnimatedBuilder(
-            animation: _confettiController,
-            builder: (context, _) => CustomPaint(
-              painter: _ConfettiPainter(
-                  particles: _particles, progress: _confettiController.value),
-              size: MediaQuery.of(context).size,
-            ),
-          ),
-          Center(
-            child: Material(
-              color: Colors.transparent,
-              child: GlassCard(
-                width: 700,
-                padding: const EdgeInsets.all(36),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Container(
-                          width: 64,
-                          height: 64,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: AppColors.cardBackgroundLight,
-                            border: Border.all(
-                                color: AppColors.cardBorder, width: 2),
-                          ),
-                          child: ClipOval(
-                              child: Image.asset(AppImages.pezeshkian,
-                                  fit: BoxFit.cover)),
-                        ),
-                        const SizedBox(width: 16),
-                        const Text('پیام دکتر پزشکیان',
-                            style: TextStyle(
-                                color: AppColors.textPrimary,
-                                fontSize: 22,
-                                fontWeight: FontWeight.bold,
-                                decoration: TextDecoration.none)),
-                      ],
-                    ),
-                    const SizedBox(height: 24),
-                    const Text(
-                      'آغاز سال تحصیلی ۱۴۰۵ را به همه دانش‌آموزان عزیز تبریک می‌گویم؛ شما سرمایه‌های درخشانی هستید که آینده این سرزمین را می‌سازید.',
-                      style: TextStyle(
-                          color: AppColors.textPrimary,
-                          fontSize: 16,
-                          height: 1.8,
-                          decoration: TextDecoration.none),
-                    ),
-                    const SizedBox(height: 16),
-                    const Text(
-                      'امید دارم امسال با تلاش، امید و یادگیری عمیق‌تر، مسیر رسیدن به رویاهای‌تان را هموارتر کنید.',
-                      style: TextStyle(
-                          color: AppColors.textSecondary,
-                          fontSize: 15,
-                          height: 1.8,
-                          decoration: TextDecoration.none),
-                    ),
-                    const SizedBox(height: 32),
-                    Center(
-                        child: SecondaryButton(
-                            text: 'بستن',
-                            autofocus: true,
-                            onPressed: () => Navigator.of(context).pop())),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Directionality(
+//       textDirection: TextDirection.rtl,
+//       child: Stack(
+//         children: [
+//           AnimatedBuilder(
+//             animation: _confettiController,
+//             builder: (context, _) => CustomPaint(
+//               painter: _ConfettiPainter(
+//                   particles: _particles, progress: _confettiController.value),
+//               size: MediaQuery.of(context).size,
+//             ),
+//           ),
+//           Center(
+//             child: Material(
+//               color: Colors.transparent,
+//               child: GlassCard(
+//                 width: 700,
+//                 padding: const EdgeInsets.all(36),
+//                 child: Column(
+//                   mainAxisSize: MainAxisSize.min,
+//                   crossAxisAlignment: CrossAxisAlignment.start,
+//                   children: [
+//                     Row(
+//                       children: [
+//                         Container(
+//                           width: 64,
+//                           height: 64,
+//                           decoration: BoxDecoration(
+//                             shape: BoxShape.circle,
+//                             color: AppColors.cardBackgroundLight,
+//                             border: Border.all(
+//                                 color: AppColors.cardBorder, width: 2),
+//                           ),
+//                           child: ClipOval(
+//                               child: Image.asset(AppImages.pezeshkian,
+//                                   fit: BoxFit.cover)),
+//                         ),
+//                         const SizedBox(width: 16),
+//                         const Text('پیام دکتر پزشکیان',
+//                             style: TextStyle(
+//                                 color: AppColors.textPrimary,
+//                                 fontSize: 22,
+//                                 fontWeight: FontWeight.bold,
+//                                 decoration: TextDecoration.none)),
+//                       ],
+//                     ),
+//                     const SizedBox(height: 24),
+//                     const Text(
+//                       'آغاز سال تحصیلی ۱۴۰۵ را به همه دانش‌آموزان عزیز تبریک می‌گویم؛ شما سرمایه‌های درخشانی هستید که آینده این سرزمین را می‌سازید.',
+//                       style: TextStyle(
+//                           color: AppColors.textPrimary,
+//                           fontSize: 16,
+//                           height: 1.8,
+//                           decoration: TextDecoration.none),
+//                     ),
+//                     const SizedBox(height: 16),
+//                     const Text(
+//                       'امید دارم امسال با تلاش، امید و یادگیری عمیق‌تر، مسیر رسیدن به رویاهای‌تان را هموارتر کنید.',
+//                       style: TextStyle(
+//                           color: AppColors.textSecondary,
+//                           fontSize: 15,
+//                           height: 1.8,
+//                           decoration: TextDecoration.none),
+//                     ),
+//                     const SizedBox(height: 32),
+//                     Center(
+//                         child: SecondaryButton(
+//                             text: 'بستن',
+//                             autofocus: true,
+//                             onPressed: () => Navigator.of(context).pop())),
+//                   ],
+//                 ),
+//               ),
+//             ),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }
 
-class _ConfettiParticle {
-  final double x = math.Random().nextDouble();
-  final double y = math.Random().nextDouble() * 0.5 - 0.5;
-  final double size = math.Random().nextDouble() * 14 + 8;
-  final Color color = [
-    Colors.pink,
-    Colors.blue,
-    Colors.green,
-    Colors.yellow,
-    Colors.purple,
-    Colors.orange,
-    Colors.cyan
-  ][math.Random().nextInt(7)];
-  final double speed = math.Random().nextDouble() * 0.4 + 0.4;
-  final double rotation = math.Random().nextDouble() * math.pi * 2;
-}
+// class _ConfettiParticle {
+//   final double x = math.Random().nextDouble();
+//   final double y = math.Random().nextDouble() * 0.5 - 0.5;
+//   final double size = math.Random().nextDouble() * 14 + 8;
+//   final Color color = [
+//     Colors.pink,
+//     Colors.blue,
+//     Colors.green,
+//     Colors.yellow,
+//     Colors.purple,
+//     Colors.orange,
+//     Colors.cyan
+//   ][math.Random().nextInt(7)];
+//   final double speed = math.Random().nextDouble() * 0.4 + 0.4;
+//   final double rotation = math.Random().nextDouble() * math.pi * 2;
+// }
 
-class _ConfettiPainter extends CustomPainter {
-  final List<_ConfettiParticle> particles;
-  final double progress;
-  _ConfettiPainter({required this.particles, required this.progress});
+// class _ConfettiPainter extends CustomPainter {
+//   final List<_ConfettiParticle> particles;
+//   final double progress;
+//   _ConfettiPainter({required this.particles, required this.progress});
 
-  @override
-  void paint(Canvas canvas, Size size) {
-    for (final p in particles) {
-      final y = (p.y + progress * p.speed * 2) % 1.5 - 0.25;
-      final x = p.x + math.sin(progress * math.pi * 4 + p.rotation) * 0.04;
-      if (y > 0 && y < 1) {
-        canvas.save();
-        canvas.translate(x * size.width, y * size.height);
-        canvas.rotate(progress * math.pi * 2 + p.rotation);
-        canvas.drawRect(
-            Rect.fromCenter(
-                center: Offset.zero, width: p.size, height: p.size * 0.5),
-            Paint()..color = p.color);
-        canvas.restore();
-      }
-    }
-  }
+//   @override
+//   void paint(Canvas canvas, Size size) {
+//     for (final p in particles) {
+//       final y = (p.y + progress * p.speed * 2) % 1.5 - 0.25;
+//       final x = p.x + math.sin(progress * math.pi * 4 + p.rotation) * 0.04;
+//       if (y > 0 && y < 1) {
+//         canvas.save();
+//         canvas.translate(x * size.width, y * size.height);
+//         canvas.rotate(progress * math.pi * 2 + p.rotation);
+//         canvas.drawRect(
+//             Rect.fromCenter(
+//                 center: Offset.zero, width: p.size, height: p.size * 0.5),
+//             Paint()..color = p.color);
+//         canvas.restore();
+//       }
+//     }
+//   }
 
-  @override
-  bool shouldRepaint(covariant _ConfettiPainter oldDelegate) => true;
-}
+//   @override
+//   bool shouldRepaint(covariant _ConfettiPainter oldDelegate) => true;
+// }
 
 // ============================================================================
 // SINGLE CLASS SCREEN
